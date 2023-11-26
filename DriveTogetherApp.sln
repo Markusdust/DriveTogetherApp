@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriveTogetherApp.Server", "DriveTogetherApp\Server\DriveTogetherApp.Server.csproj", "{1909F419-DD23-43D6-9ACA-D1572709CD7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DriveTogetherApp.Server", "DriveTogetherApp\Server\DriveTogetherApp.Server.csproj", "{1909F419-DD23-43D6-9ACA-D1572709CD7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriveTogetherApp.Client", "DriveTogetherApp\Client\DriveTogetherApp.Client.csproj", "{371D4438-1F08-463D-A599-6CC6C6265BE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DriveTogetherApp.Client", "DriveTogetherApp\Client\DriveTogetherApp.Client.csproj", "{371D4438-1F08-463D-A599-6CC6C6265BE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriveTogetherApp.Shared", "DriveTogetherApp\Shared\DriveTogetherApp.Shared.csproj", "{9DCF5698-DA0A-4E2D-ADC3-ADDE90931712}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DriveTogetherApp.Shared", "DriveTogetherApp\Shared\DriveTogetherApp.Shared.csproj", "{9DCF5698-DA0A-4E2D-ADC3-ADDE90931712}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

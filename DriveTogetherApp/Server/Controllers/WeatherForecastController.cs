@@ -1,4 +1,3 @@
-using DriveTogetherApp.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DriveTogetherApp.Server.Controllers
