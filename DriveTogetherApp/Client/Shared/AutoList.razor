@@ -1,5 +1,44 @@
-﻿<h3>AutoList</h3>
+﻿<ul class="list-unstyled">
+    @foreach (var auto in Autos){
+        <div class="medai-body">
+            <a href="#">
+                <h4 class="mb-0">@auto.Fahrtenanbieter</h4>
+            </a>
+            <p>@auto.Marke</p>
+            <h5 class="price">
+                @auto.Modell
+            </h5>
+        </div>
+    }
+</ul>
 
 @code {
+    private static List<Auto> Autos = new List<Auto>
+    {
+        new Auto
+        {
+        AutoId = 1,
+        Fahrtenanbieter = "Markus Transporte",
+        Marke = "Volkswagen",
+        Modell = "Golf",
+        Farbe = "Blau",
+        Kennzeichen = "B-MK 1234",
+        Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
+        Typ = "Kompakt"
+        }, 
+
+       new Auto
+        {
+        AutoId = 2,
+        Fahrtenanbieter = "Markus Transporte",
+        Marke = "Volkswagen",
+        Modell = "Golf",
+        Farbe = "Blau",
+        Kennzeichen = "B-MK 1234",
+        Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
+        Typ = "Kompakt"
+        },
+    };
 
 }
+ 
