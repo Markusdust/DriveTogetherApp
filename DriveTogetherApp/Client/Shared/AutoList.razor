@@ -1,4 +1,7 @@
-﻿<ul class="list-unstyled">
+﻿@inject HttpClient Http
+
+@using DriveTogetherApp.Shared.Model
+<ul class="list-unstyled">
     @foreach (var auto in Autos){
         <div class="medai-body">
             <a href="#">
@@ -13,32 +16,13 @@
 </ul>
 
 @code {
-    private static List<Auto> Autos = new List<Auto>
+    private static List<Auto> Autos = new List<Auto>();
+
+    protected override async Task OnInitializedAsync()
     {
-        new Auto
-        {
-        AutoId = 1,
-        Fahrtenanbieter = "Markus Transporte",
-        Marke = "Volkswagen",
-        Modell = "Golf",
-        Farbe = "Blau",
-        Kennzeichen = "B-MK 1234",
-        Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
-        Typ = "Kompakt"
-        }, 
-
-       new Auto
-        {
-        AutoId = 2,
-        Fahrtenanbieter = "Markus Transporte",
-        Marke = "Volkswagen",
-        Modell = "Golf",
-        Farbe = "Blau",
-        Kennzeichen = "B-MK 1234",
-        Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
-        Typ = "Kompakt"
-        },
-    };
-
+        var result = await Http.GetFromJsonAsync<List<Auto>>("api/Auto");
+        if (result != null)
+            Autos = result;
+    }
 }
  
