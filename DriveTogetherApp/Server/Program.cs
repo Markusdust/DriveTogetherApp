@@ -1,7 +1,9 @@
 global using DriveTogetherApp.Shared;
 global using Microsoft.EntityFrameworkCore;
 global using DriveTogetherApp.Server.Data;
+global using DriveTogetherApp.Server.Services.AutoService;
 using Microsoft.AspNetCore.ResponseCompression;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IAutoService, AutoService>();
 
 var app = builder.Build();
 

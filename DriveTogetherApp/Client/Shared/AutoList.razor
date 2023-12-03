@@ -20,9 +20,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<List<Auto>>("api/Auto");
-        if (result != null)
-            Autos = result;
+        var result = await Http.GetFromJsonAsync<ServiceResponse<List<Auto>>>("api/Auto");
+        if (result != null && result.Data != null)
+            Autos = result.Data;
     }
 }
  

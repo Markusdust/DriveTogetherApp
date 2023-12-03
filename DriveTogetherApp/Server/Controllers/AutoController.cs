@@ -1,5 +1,4 @@
-﻿
-using DriveTogetherApp.Shared.Model;
+﻿using DriveTogetherApp.Shared.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DriveTogetherApp.Server.Controllers
@@ -7,16 +6,18 @@ namespace DriveTogetherApp.Server.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class AutoController : ControllerBase
-    { 
-        private readonly DataContext _context;
-        public AutoController(DataContext _context) 
+    {
+        private readonly IAutoService _autoService;
+        public AutoController(IAutoService autoService)
         {
+            _autoService = autoService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Auto>>> GetAuto()
+        public async Task<ActionResult<ServiceResponse<List<Auto>>>> GetAuto()
         {
-            return Ok(Autos);
+            var result = await _autoService.GetAutosAsync();
+            return Ok(result);
         }
     }
 }
