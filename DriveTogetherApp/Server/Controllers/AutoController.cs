@@ -14,9 +14,16 @@ namespace DriveTogetherApp.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<Auto>>>> GetAuto()
+        public async Task<ActionResult<ServiceResponse<List<Auto>>>> GetAutos()
         {
             var result = await _autoService.GetAutosAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("{autoId}")]
+        public async Task<ActionResult<ServiceResponse<Auto>>> GetAuto(int autoId)
+        {
+            var result = await _autoService.GetAutoAsync(autoId);
             return Ok(result);
         }
     }

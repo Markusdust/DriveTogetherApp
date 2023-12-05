@@ -1,0 +1,30 @@
+﻿@page "/auto/{id:int}"
+@inject IAutoService AutoService
+
+@if(auto == null)
+{
+    <span>Loading Auto...</span>
+
+}else
+{
+        <div>
+            <h2>@auto.AutoId</h2>
+            <p>@auto.Fahrtenanbieter</p>
+            <p>@auto.Marke</p>
+            <p>@auto.Farbe</p>
+            <p>@auto.Kennzeichen</p>
+            <p>@auto.Baujahr</p>
+            <p>@auto.Typ</p>
+    </div>
+}
+
+@code {
+    private Auto? auto = null;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnParametersSetAsync(){
+        auto = AutoService.Autos.Find(a => a.AutoId == Id);
+    }
+}

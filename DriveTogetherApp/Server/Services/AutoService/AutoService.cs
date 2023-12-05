@@ -9,6 +9,24 @@ namespace DriveTogetherApp.Server.Services.AutoService
         {
             _context = context; 
         }
+
+        public async Task<ServiceResponse<Auto>> GetAutoAsync(int autoId)
+        {
+            var response = new ServiceResponse<Auto>();
+            var auto = await _context.Autos.FindAsync(autoId);
+            if (auto == null)
+            {
+                response.Success = false;
+                response.Message = "Auto existiert nicht.";
+            }
+            else
+            {
+                response.Data = auto;
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<List<Auto>>> GetAutosAsync()
         {
             var response = new ServiceResponse<List<Auto>>

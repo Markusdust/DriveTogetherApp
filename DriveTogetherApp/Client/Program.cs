@@ -1,3 +1,4 @@
+global using DriveTogetherApp.Shared;
 using DriveTogetherApp.Client;
 using DriveTogetherApp.Client.Services.AutoService;
 using Microsoft.AspNetCore.Components.Web;
