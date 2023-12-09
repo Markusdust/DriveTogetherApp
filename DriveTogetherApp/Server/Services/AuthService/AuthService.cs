@@ -26,6 +26,9 @@ namespace DriveTogetherApp.Server.Services.AuthService
 
             benutzer.PasswortHash = passswordHash;
             benutzer.PasswortSalt = passwortSalt;
+
+            _context.Benutzers.Add(benutzer);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> UserExists(string email)
