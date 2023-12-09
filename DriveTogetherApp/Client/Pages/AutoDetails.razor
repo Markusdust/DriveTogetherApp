@@ -3,7 +3,7 @@
 
 @if(auto == null)
 {
-    <span>Loading Auto...</span>
+    <span>@message</span>
 
 }else
 {
@@ -20,11 +20,23 @@
 
 @code {
     private Auto? auto = null;
+    private string message= string.Empty;
 
     [Parameter]
     public int Id { get; set; }
 
-    protected override async Task OnParametersSetAsync(){
-        auto = AutoService.Autos.Find(a => a.AutoId == Id);
+    protected override async Task OnParametersSetAsync()
+    {
+        message = "Loading Auto...";
+
+        var result = await AutoService.GetAuto(Id);
+        if (!result.Success)
+        {
+            message = result.Message;
+        }
+        else
+        {
+            auto = result.Data;
+        }
     }
 }

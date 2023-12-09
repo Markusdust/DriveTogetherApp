@@ -6,5 +6,6 @@ namespace DriveTogetherApp.Client.Services.AutoService
     {
         List<Auto> Autos { get; set; }
         Task GetAutos();
+        Task<ServiceResponse<Auto>> GetAuto(int autoId);
     }
 }

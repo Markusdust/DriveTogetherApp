@@ -10,6 +10,11 @@ namespace DriveTogetherApp.Server.Services.AutoService
             _context = context; 
         }
 
+        //public async Task<ServiceResponse<Auto>> AddOrUpdateAuto(Auto auto)
+        //{
+            
+        //}
+
         public async Task<ServiceResponse<Auto>> GetAutoAsync(int autoId)
         {
             var response = new ServiceResponse<Auto>();
