@@ -2,6 +2,7 @@ global using DriveTogetherApp.Shared;
 global using Microsoft.EntityFrameworkCore;
 global using DriveTogetherApp.Server.Data;
 global using DriveTogetherApp.Server.Services.AutoService;
+global using DriveTogetherApp.Server.Services.AuthService;
 using Microsoft.AspNetCore.ResponseCompression;
 
 
@@ -21,6 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAutoService, AutoService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
