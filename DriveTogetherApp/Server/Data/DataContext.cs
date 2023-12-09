@@ -39,5 +39,6 @@ namespace DriveTogetherApp.Server.Data
         }
 
         public DbSet<Auto> Autos { get; set; }
+        public DbSet<Benutzer> Benutzers { get; set; }
     }
 }

@@ -11,11 +11,12 @@ namespace DriveTogetherApp.Shared.Model
         public int BenutzerId { get; set; } //PK
         public string Vorname { get; set; }
         public string Nachname { get; set; }
-        public string Email { get; set; }
-        public string Passwort { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public byte[] PasswortHash { get; set; }
+        public byte[] PasswortSalt { get; set; }
         public DateTime Geburtsdatum { get; set; }
         public string Telefonnummer { get; set; }
-        public DateTime Registrierungsdatum { get; set; }
+        public DateTime Registrierungsdatum { get; set; } =DateTime.Now;
 
         /*
         // Foreign Key
