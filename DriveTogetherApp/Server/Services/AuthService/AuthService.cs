@@ -29,6 +29,8 @@ namespace DriveTogetherApp.Server.Services.AuthService
 
             _context.Benutzers.Add(benutzer);
             await _context.SaveChangesAsync();
+
+            return new ServiceResponse<int> { Data = benutzer.BenutzerId };
         }
 
         public async Task<bool> UserExists(string email)
