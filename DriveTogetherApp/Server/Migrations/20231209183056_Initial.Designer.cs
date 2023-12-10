@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231203152452_AutoSeeding")]
-    partial class AutoSeeding
+    [Migration("20231209183056_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,49 @@ namespace DriveTogetherApp.Server.Migrations
                             Modell = "Golf",
                             Typ = "Kompakt"
                         });
+                });
+
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Benutzer", b =>
+                {
+                    b.Property<int>("BenutzerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BenutzerId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Geburtsdatum")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nachname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswortHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswortSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("Registrierungsdatum")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Telefonnummer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Vorname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BenutzerId");
+
+                    b.ToTable("Benutzers");
                 });
 #pragma warning restore 612, 618
         }

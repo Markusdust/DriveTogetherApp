@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231209175511_Users")]
-    partial class Users
+    [Migration("20231209183253_User")]
+    partial class User
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,7 +101,7 @@ namespace DriveTogetherApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Geburtsdatum")
+                    b.Property<DateTime?>("Geburtsdatum")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nachname")

@@ -98,7 +98,7 @@ namespace DriveTogetherApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Geburtsdatum")
+                    b.Property<DateTime?>("Geburtsdatum")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nachname")

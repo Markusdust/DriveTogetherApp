@@ -1,4 +1,5 @@
 ﻿@page "/register"
+@inject IAuthService AuthService
 
 <PageTitle>Register</PageTitle>
 <h3>Register</h3>
@@ -22,13 +23,26 @@
     <ValidationMessage For="@(() => benutzer.ConfirmPassword)" />
 </div>
 <button typeof="submit" class="btn btn-primary">Registrieren</button>
+<div class="text-danger">
+        <span>@errorMessage</span>
+</div>
 
 </EditForm>
 @code {
     BenutzerRegister benutzer = new BenutzerRegister();
 
-    void HandleRegistration()
+    string errorMessage = string.Empty;
+
+    async void HandleRegistration()
     {
-        Console.WriteLine($"Reigster User with the Email {benutzer.Email}"); 
+        var result = await AuthService.Register(benutzer);
+        if (!result.Success)
+        {
+            errorMessage = result.Message;
+        }
+        else
+        {
+            errorMessage = string.Empty;
+        }
     }
 }
