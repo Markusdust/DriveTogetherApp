@@ -30,7 +30,7 @@ namespace DriveTogetherApp.Server.Services.AuthService
             _context.Benutzers.Add(benutzer);
             await _context.SaveChangesAsync();
 
-            return new ServiceResponse<int> { Data = benutzer.BenutzerId };
+            return new ServiceResponse<int> { Data = benutzer.BenutzerId, Message ="Registration successful!" };
         }
 
         public async Task<bool> UserExists(string email)
