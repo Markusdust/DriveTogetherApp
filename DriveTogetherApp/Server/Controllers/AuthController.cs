@@ -28,5 +28,20 @@ namespace DriveTogetherApp.Server.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<ServiceResponse<string>>> Login(BenutzerLogin request)
+        {
+            var response = await _authService.Login(request.Email, request.Password);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            else
+            {
+                return Ok(response);
+            }
+
+        }
     }
 }
