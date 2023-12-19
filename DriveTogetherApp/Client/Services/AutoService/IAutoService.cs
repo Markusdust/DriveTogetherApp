@@ -6,7 +6,7 @@ namespace DriveTogetherApp.Client.Services.AutoService
     {
         List<Auto> Autos { get; set; }
         Task GetAutos();
-        Task GetAutosFromUser();
+        Task<ServiceResponse<List<Auto>>> GetAutosByUserId(string userId);
         Task<ServiceResponse<Auto>> GetAuto(int autoId);
     }
 }

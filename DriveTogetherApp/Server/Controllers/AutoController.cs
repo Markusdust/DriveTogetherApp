@@ -21,11 +21,10 @@ namespace DriveTogetherApp.Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("autosUser")]
-        public async Task<ActionResult<ServiceResponse<List<Auto>>>> GetAutosFromUser()
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<ServiceResponse<List<Auto>>>> GetAutosByUserId(string userId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = await _autoService.GetAutosFromUserAsync(int.Parse("1"));
+            var result = await _autoService.GetAutosByUserIdAsync(userId);
             return Ok(result);
         }
 

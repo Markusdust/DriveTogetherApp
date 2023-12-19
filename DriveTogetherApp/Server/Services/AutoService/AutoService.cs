@@ -1,4 +1,5 @@
-﻿using DriveTogetherApp.Shared.Model;
+﻿using DriveTogetherApp.Client.Pages;
+using DriveTogetherApp.Shared.Model;
 
 namespace DriveTogetherApp.Server.Services.AutoService
 {
@@ -42,13 +43,19 @@ namespace DriveTogetherApp.Server.Services.AutoService
             return response;
         }
 
-        public async Task<ServiceResponse<List<Auto>>> GetAutosFromUserAsync(int userId)
+        public async Task<ServiceResponse<List<Auto>>> GetAutosByUserIdAsync(string userId)
         {
-            var user = await _context.Benutzers.FindAsync(userId);
-            var response = new ServiceResponse<List<Auto>>
+            var response = new ServiceResponse<List<Auto>>();
+            var auto = await _context.Autos.Where(a => a.AutoId == 1).ToListAsync();
+            if (auto == null)
             {
-                Data = await _context.Autos.Where(a => a.AutoId ==1).ToListAsync()
-            };
+                response.Success = false;
+                response.Message = "Auto existiert nicht.";
+            }
+            else
+            {
+                response.Data = auto;
+            }
 
             return response;
         }
