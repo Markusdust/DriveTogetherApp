@@ -4,6 +4,8 @@ global using DriveTogetherApp.Server.Data;
 global using DriveTogetherApp.Server.Services.AutoService;
 global using DriveTogetherApp.Server.Services.AuthService;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,18 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAutoService, AutoService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer =false,
+            ValidateAudience = false
+        };
+    });
 
 var app = builder.Build();
 
@@ -47,6 +61,9 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.MapRazorPages();

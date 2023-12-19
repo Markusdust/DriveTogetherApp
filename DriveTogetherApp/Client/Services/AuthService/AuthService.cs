@@ -11,6 +11,12 @@ namespace DriveTogetherApp.Client.Services.AuthService
             _http = http;
         }
 
+        public async Task<ServiceResponse<bool>> ChangePassword(BenutzerChangePassword request)
+        {
+            var result = await _http.PostAsJsonAsync("api/auth/change-password", request.Passwort);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+        }
+
         public async Task<ServiceResponse<string>> Login(BenutzerLogin request)
         {
             var result = await _http.PostAsJsonAsync("api/auth/login", request);
