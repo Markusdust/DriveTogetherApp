@@ -1,0 +1,31 @@
+﻿@page "/autos"
+@inject IAutoService AutoService
+
+@if (AutoService.Autos == null || AutoService.Autos.Count == 0)
+{
+    <span>Loading Autos...</span>
+}
+else
+{
+    <ul class="list-unstyled">
+        @foreach (var auto in AutoService.Autos)
+        {
+            <li class="media my-4">
+                <div class="media-body">
+                    <a href="/auto/@auto.AutoId">
+                        <h4 class="mb-0">@auto.Fahrtenanbieter</h4>
+                    </a>
+                    <p>@auto.Marke - @auto.Modell</p>
+                </div>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        //await AutoService.GetAutos();
+        await AutoService.GetAutosFromUser();
+    }
+}

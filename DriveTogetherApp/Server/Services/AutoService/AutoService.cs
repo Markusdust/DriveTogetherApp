@@ -41,5 +41,16 @@ namespace DriveTogetherApp.Server.Services.AutoService
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<Auto>>> GetAutosFromUserAsync(int userId)
+        {
+            var user = await _context.Benutzers.FindAsync(userId);
+            var response = new ServiceResponse<List<Auto>>
+            {
+                Data = await _context.Autos.Where(a => a.AutoId ==1).ToListAsync()
+            };
+
+            return response;
+        }
     }
 }

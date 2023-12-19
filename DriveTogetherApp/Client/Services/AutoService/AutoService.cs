@@ -27,5 +27,12 @@ namespace DriveTogetherApp.Client.Services.AutoService
             if (result != null && result.Data != null)
             Autos = result.Data;
         }
+
+        public async Task GetAutosFromUser()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<Auto>>>("api/autosUser");
+            if (result != null && result.Data != null)
+                Autos = result.Data;
+        }
     }
 }
