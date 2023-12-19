@@ -11,11 +11,13 @@ namespace DriveTogetherApp.Client
     {
         private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _http;
+
         public CustomAuthStateProvider(ILocalStorageService localStorageService, HttpClient http)
         {
             _localStorageService = localStorageService;
             _http = http;
         }
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             string authToken = await _localStorageService.GetItemAsStringAsync("authToken");
@@ -27,7 +29,7 @@ namespace DriveTogetherApp.Client
             {
                 try
                 {
-                    identity = ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
+                    identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
                     _http.DefaultRequestHeaders.Authorization =
                         new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
                 }
@@ -37,6 +39,7 @@ namespace DriveTogetherApp.Client
                     identity = new ClaimsIdentity();
                 }
             }
+
             var user = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(user);
 
@@ -57,9 +60,10 @@ namespace DriveTogetherApp.Client
 
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
-            var payload = jwt.Split(',')[1];
+            var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
-            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+            var keyValuePairs = JsonSerializer
+                .Deserialize<Dictionary<string, object>>(jsonBytes);
 
             var claims = keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
 

@@ -117,5 +117,27 @@ namespace DriveTogetherApp.Server.Services.AuthService
 
             return jwt;
         }
+
+        public async Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword)
+        {
+            var user = await _context.Benutzers.FindAsync(userId);
+            if(user == null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "Benutzer nicht gefunden."
+                };
+            }
+
+            CreatePasswordHash(newPassword, out byte[] passwordHash, out byte[] passwordsalt);
+
+            user.PasswortHash   = passwordHash;
+            user.PasswortSalt = passwordsalt;
+
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse<bool> { Data = true, Message = "Password wurde geändert" };
+        }
     }
 }
