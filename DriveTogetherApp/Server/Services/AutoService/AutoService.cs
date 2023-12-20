@@ -59,5 +59,40 @@ namespace DriveTogetherApp.Server.Services.AutoService
 
             return response;
         }
+
+        public async Task<ServiceResponse<Auto>> UpdateAuto(Auto auto)
+        {
+            var serviceResponse = new ServiceResponse<Auto>();
+            try
+            {
+                Auto autoToUpdate = await _context.Autos.FindAsync(auto.AutoId);
+                if (autoToUpdate == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Auto nicht gefunden.";
+                    return serviceResponse;
+                }
+
+                // Aktualisieren der Eigenschaften, ausser BenutzerId und AutoId
+                autoToUpdate.Marke = auto.Marke;
+                autoToUpdate.Modell = auto.Modell;
+                autoToUpdate.Farbe = auto.Farbe;
+                autoToUpdate.Kennzeichen = auto.Kennzeichen;
+                autoToUpdate.Baujahr = auto.Baujahr;
+                autoToUpdate.Typ = auto.Typ;
+
+                _context.Autos.Update(autoToUpdate);
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = autoToUpdate;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
     }
 }

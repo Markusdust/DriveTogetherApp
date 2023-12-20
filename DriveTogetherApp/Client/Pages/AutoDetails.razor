@@ -73,8 +73,19 @@
         }
     }
 
-    private void HandleUpdateCar()
+    private async Task HandleUpdateCar()
     {
-        Console.WriteLine("machnix");
+        if (auto != null)
+        {
+            var result = await AutoService.UpdateAuto(auto);
+            if (result.Success)
+            {
+                message = "Auto erfolgreich aktualisiert.";
+            }
+            else
+            {
+                message = "Fehler beim Aktualisieren des Autos: " + result.Message;
+            }
+        }
     }
 }

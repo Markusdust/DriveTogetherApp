@@ -34,5 +34,10 @@ namespace DriveTogetherApp.Client.Services.AutoService
             return result;
         }
 
+        public async Task<ServiceResponse<Auto>> UpdateAuto(Auto auto)
+        {
+            var response = await _http.PutAsJsonAsync($"api/auto/{auto.AutoId}", auto);
+            return await response.Content.ReadFromJsonAsync<ServiceResponse<Auto>>();
+        }
     }
 }
