@@ -15,6 +15,12 @@ namespace DriveTogetherApp.Client.Services.AutoService
         }
         public List<Auto> Autos { get; set; } = new List<Auto>();
 
+        public async Task<ServiceResponse<Auto>> CreateAuto(Auto auto)
+        {
+            var response = await _http.PostAsJsonAsync("api/auto", auto);
+            return await response.Content.ReadFromJsonAsync<ServiceResponse<Auto>>();
+        }
+
         public async Task<ServiceResponse<Auto>> GetAuto(int autoId)
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<Auto>>($"api/auto/{autoId}");

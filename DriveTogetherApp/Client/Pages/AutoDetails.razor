@@ -7,7 +7,7 @@
 
 }else
 {
-    <EditForm Model = "auto" OnValidSubmit="HandleUpdateCar">
+    <EditForm Model = "auto" OnValidSubmit="HandleUpdateAuto">
         <div class="mb-3">
             <label for="id">AutoId: @auto.AutoId</label>
         </div>
@@ -46,7 +46,7 @@
             </InputSelect>
         </div>
 
-        <button typeof="submit" class="btn btn-primary">Updaten</button>
+        <button type="submit" class="btn btn-primary">Updaten</button>
     </EditForm>
 
 }
@@ -73,10 +73,13 @@
         }
     }
 
-    private async Task HandleUpdateCar()
+    private async Task HandleUpdateAuto()
     {
+        Console.WriteLine("Update aufruf");
+        Console.WriteLine($"Auto-Details: ID = {auto.AutoId}, Marke = {auto.Marke}, Modell = {auto.Modell}");
         if (auto != null)
         {
+
             var result = await AutoService.UpdateAuto(auto);
             if (result.Success)
             {
@@ -87,5 +90,14 @@
                 message = "Fehler beim Aktualisieren des Autos: " + result.Message;
             }
         }
+        else
+        {
+            Console.WriteLine("Auto-Objekt ist null");
+        }
+    }
+
+    private async Task CreateAuto()
+    {
+        var result = await AutoService.CreateAuto(auto);
     }
 }

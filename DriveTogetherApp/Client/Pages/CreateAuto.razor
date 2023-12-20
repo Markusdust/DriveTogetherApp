@@ -1,0 +1,74 @@
+﻿@page "/create-auto"
+@using System.Security.Claims
+@inject IAutoService AutoService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<EditForm Model="auto" OnValidSubmit="HandleCreateAuto">
+    <!-- Formularfelder für Auto-Details -->
+    <div class="mb-3">
+        <label for="marke">Marke</label>
+        <InputText id="marke" @bind-Value="auto.Marke" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="modell">Modell</label>
+        <InputText id="modell" @bind-Value="auto.Modell" class="form-control" />
+    </div>
+
+     <div class="mb-3">
+            <label for="farbe">Farbe</label>
+            <InputText id="farbe" @bind-Value="auto.Farbe" class="form-control" />
+     </div>
+
+        <div class="mb-3">
+            <label for="kennzeichen">Kennzeichen</label>
+            <InputText id="kennzeichen" @bind-Value="auto.Kennzeichen" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="baujahr">Baujahr</label>
+            <InputDate id="baujahr" @bind-Value="auto.Baujahr" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="typ">Typ:</label>
+            <InputSelect id="typ" class="form-control" @bind-Value="auto.Typ">
+                <option value="">Wählen Sie einen Typ...</option>
+                <option value="Limousine">Limousine</option>
+                <option value="SUV">SUV</option>
+                <option value="Coupe">Coupe</option>
+            </InputSelect>
+        </div>
+    <!-- Weitere Felder für Modell, Farbe, Kennzeichen, usw. -->
+    <button type="submit" class="btn btn-primary">Auto erstellen</button>
+</EditForm>
+
+@code {
+    private Auto auto = new Auto();
+    private string message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            auto.BenutzerId = int.Parse(user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+        }
+    }
+
+    private async Task HandleCreateAuto()
+    {
+        Console.WriteLine("value:" + auto.BenutzerId);
+        var result = await AutoService.CreateAuto(auto);
+        if (result.Success)
+        {
+            message = "Auto erfolgreich erstellt.";
+            // Optional: Weiterleitung oder Aktualisierung der Seite
+        }
+        else
+        {
+            message = "Fehler: " + result.Message;
+        }
+    }
+}

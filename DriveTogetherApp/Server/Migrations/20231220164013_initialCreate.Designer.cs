@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231220142536_initialCreate1")]
-    partial class initialCreate1
+    [Migration("20231220164013_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,8 @@ namespace DriveTogetherApp.Server.Migrations
                     b.Property<DateTime>("Baujahr")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("BenutzerId")
+                    b.Property<int?>("BenutzerId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Farbe")
@@ -141,7 +142,7 @@ namespace DriveTogetherApp.Server.Migrations
                             Nachname = "Mustermann",
                             PasswortHash = new byte[0],
                             PasswortSalt = new byte[0],
-                            Registrierungsdatum = new DateTime(2023, 12, 20, 15, 25, 36, 445, DateTimeKind.Local).AddTicks(9932),
+                            Registrierungsdatum = new DateTime(2023, 12, 20, 17, 40, 13, 354, DateTimeKind.Local).AddTicks(7394),
                             Telefonnummer = "0123456789",
                             Vorname = "Max"
                         });

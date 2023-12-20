@@ -24,9 +24,5 @@ namespace DriveTogetherApp.Shared.Model
 
         // Navigationseigenschaften
         //public virtual ICollection<Fahrt> Fahrten { get; set; }
-
-        // Navigationseigenschaft für Benutzer
-        [ForeignKey("BenutzerId")]
-        public Benutzer Benutzer { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DriveTogetherApp.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate1 : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,7 +61,7 @@ namespace DriveTogetherApp.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Benutzers",
                 columns: new[] { "BenutzerId", "Email", "Geburtsdatum", "Nachname", "PasswortHash", "PasswortSalt", "Registrierungsdatum", "Telefonnummer", "Vorname" },
-                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 20, 15, 25, 36, 445, DateTimeKind.Local).AddTicks(9932), "0123456789", "Max" });
+                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 20, 17, 40, 13, 354, DateTimeKind.Local).AddTicks(7394), "0123456789", "Max" });
 
             migrationBuilder.InsertData(
                 table: "Autos",

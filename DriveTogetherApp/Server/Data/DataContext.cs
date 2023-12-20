@@ -14,7 +14,7 @@ namespace DriveTogetherApp.Server.Data
             // Definieren der Beziehung
             modelBuilder.Entity<Benutzer>()
                 .HasMany(b => b.Autos)
-                .WithOne(a => a.Benutzer)
+                .WithOne()
                 .HasForeignKey(a => a.BenutzerId);
 
             modelBuilder.Entity<Benutzer>().HasData(
@@ -42,7 +42,8 @@ namespace DriveTogetherApp.Server.Data
                     Farbe = "Rot",
                     Kennzeichen = "B-MK 1234",
                     Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
-                    Typ = "SUV"
+                    Typ = "SUV",
+                   
                 },
 
                new Auto
