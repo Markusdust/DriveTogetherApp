@@ -36,13 +36,8 @@ namespace DriveTogetherApp.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAuto(int autoid, [FromBody] Auto auto)
+        public async Task<IActionResult> UpdateAuto([FromBody] Auto auto)
         {
-            if (autoid != auto.AutoId)
-            {
-                return BadRequest("Die Auto-ID stimmt nicht überein.");
-            }
-
             var serviceResponse = await _autoService.UpdateAuto(auto);
 
             if (!serviceResponse.Success)

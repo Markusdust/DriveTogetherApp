@@ -3,6 +3,8 @@
 @inject IAutoService AutoService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+<NavLink class="btn btn-primary" href="/erstellen-auto">Neues Auto erstellen</NavLink>
+
 @if (autos == null)
 {
     <p>Loading...</p>
@@ -17,7 +19,6 @@ else
             </a>
             <p><strong>Marke:</strong> @auto.Marke</p>
             <p><strong>Modell:</strong> @auto.Modell</p>
-            // ... weitere Auto-Details ...
         </div>
     }
 }
