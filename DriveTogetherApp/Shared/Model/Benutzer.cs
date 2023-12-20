@@ -23,7 +23,11 @@ namespace DriveTogetherApp.Shared.Model
         public string Telefonnummer { get; set; } = string.Empty;
         public DateTime Registrierungsdatum { get; set; } =DateTime.Now;
 
+
+        // Navigationseigenschaft für Autos
+        public virtual ICollection<Auto> Autos { get; set; }
         /*
+         * 
         // Foreign Key
         public int AdresseId { get; set; }
 

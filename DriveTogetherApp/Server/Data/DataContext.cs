@@ -11,29 +11,50 @@ namespace DriveTogetherApp.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Definieren der Beziehung
+            modelBuilder.Entity<Benutzer>()
+                .HasMany(b => b.Autos)
+                .WithOne(a => a.Benutzer)
+                .HasForeignKey(a => a.BenutzerId);
+
+            modelBuilder.Entity<Benutzer>().HasData(
+               new Benutzer
+               {
+                   BenutzerId = 1,
+                   Vorname = "Max",
+                   Nachname = "Mustermann",
+                   Email = "max.mustermann@example.com",
+                   PasswortHash = new byte[0], // Ersetzen Sie dies durch einen echten Hash
+                   PasswortSalt = new byte[0], // Ersetzen Sie dies durch echten Salt
+                   Geburtsdatum = new DateTime(1990, 1, 1),
+                   Telefonnummer = "0123456789",
+                   Registrierungsdatum = DateTime.Now
+               }
+           );
+
             modelBuilder.Entity<Auto>().HasData(
                 new Auto
                 {
                     AutoId = 1,
-                    Fahrtenanbieter = "Markus Transporte",
+                    BenutzerId = 1,
                     Marke = "Volkswagen",
-                    Modell = "Golf",
-                    Farbe = "Blau",
+                    Modell = "Polo",
+                    Farbe = "Rot",
                     Kennzeichen = "B-MK 1234",
                     Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
-                    Typ = "Kompakt"
+                    Typ = "SUV"
                 },
 
                new Auto
                {
                    AutoId = 2,
-                   Fahrtenanbieter = "Markus Transporte",
+                   BenutzerId = 1,
                    Marke = "Volkswagen",
                    Modell = "Golf",
                    Farbe = "Blau",
                    Kennzeichen = "B-MK 1234",
                    Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
-                   Typ = "Kompakt"
+                   Typ = "Limousine"
                }
            );
         }

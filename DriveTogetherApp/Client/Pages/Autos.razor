@@ -12,7 +12,9 @@ else
     @foreach (var auto in autos)
     {
         <div>
-            <p><strong>ID:</strong> @auto.AutoId</p>
+            <a href="/auto/@auto.AutoId">
+                <h4 class="mb-0">ID: @auto.AutoId</h4>
+            </a>
             <p><strong>Marke:</strong> @auto.Marke</p>
             <p><strong>Modell:</strong> @auto.Modell</p>
             // ... weitere Auto-Details ...

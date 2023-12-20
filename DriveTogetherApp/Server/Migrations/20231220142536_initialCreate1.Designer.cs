@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231209183056_Initial")]
-    partial class Initial
+    [Migration("20231220142536_initialCreate1")]
+    partial class initialCreate1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,9 +36,8 @@ namespace DriveTogetherApp.Server.Migrations
                     b.Property<DateTime>("Baujahr")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Fahrtenanbieter")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("BenutzerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Farbe")
                         .IsRequired()
@@ -62,6 +61,8 @@ namespace DriveTogetherApp.Server.Migrations
 
                     b.HasKey("AutoId");
 
+                    b.HasIndex("BenutzerId");
+
                     b.ToTable("Autos");
 
                     b.HasData(
@@ -69,23 +70,23 @@ namespace DriveTogetherApp.Server.Migrations
                         {
                             AutoId = 1,
                             Baujahr = new DateTime(2018, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Fahrtenanbieter = "Markus Transporte",
-                            Farbe = "Blau",
+                            BenutzerId = 1,
+                            Farbe = "Rot",
                             Kennzeichen = "B-MK 1234",
                             Marke = "Volkswagen",
-                            Modell = "Golf",
-                            Typ = "Kompakt"
+                            Modell = "Polo",
+                            Typ = "SUV"
                         },
                         new
                         {
                             AutoId = 2,
                             Baujahr = new DateTime(2018, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Fahrtenanbieter = "Markus Transporte",
+                            BenutzerId = 1,
                             Farbe = "Blau",
                             Kennzeichen = "B-MK 1234",
                             Marke = "Volkswagen",
                             Modell = "Golf",
-                            Typ = "Kompakt"
+                            Typ = "Limousine"
                         });
                 });
 
@@ -130,6 +131,36 @@ namespace DriveTogetherApp.Server.Migrations
                     b.HasKey("BenutzerId");
 
                     b.ToTable("Benutzers");
+
+                    b.HasData(
+                        new
+                        {
+                            BenutzerId = 1,
+                            Email = "max.mustermann@example.com",
+                            Geburtsdatum = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nachname = "Mustermann",
+                            PasswortHash = new byte[0],
+                            PasswortSalt = new byte[0],
+                            Registrierungsdatum = new DateTime(2023, 12, 20, 15, 25, 36, 445, DateTimeKind.Local).AddTicks(9932),
+                            Telefonnummer = "0123456789",
+                            Vorname = "Max"
+                        });
+                });
+
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Auto", b =>
+                {
+                    b.HasOne("DriveTogetherApp.Shared.Model.Benutzer", "Benutzer")
+                        .WithMany("Autos")
+                        .HasForeignKey("BenutzerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Benutzer");
+                });
+
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Benutzer", b =>
+                {
+                    b.Navigation("Autos");
                 });
 #pragma warning restore 612, 618
         }

@@ -46,7 +46,7 @@ namespace DriveTogetherApp.Server.Services.AutoService
         public async Task<ServiceResponse<List<Auto>>> GetAutosByUserIdAsync(string userId)
         {
             var response = new ServiceResponse<List<Auto>>();
-            var auto = await _context.Autos.Where(a => a.AutoId == 1).ToListAsync();
+            var auto = await _context.Autos.Where(a => a.BenutzerId ==  int.Parse(userId)).ToListAsync();
             if (auto == null)
             {
                 response.Success = false;

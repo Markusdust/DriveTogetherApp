@@ -1,0 +1,58 @@
+﻿@page "/autoverwaltung"
+
+<EditForm Model="auto" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="marke">Marke:</label>
+        <InputText id="marke" class="form-control" @bind-Value="auto.Marke" />
+    </div>
+
+    <div class="form-group">
+        <label for="modell">Modell:</label>
+        <InputText id="modell" class="form-control" @bind-Value="auto.Modell" />
+    </div>
+
+    <div class="form-group">
+        <label for="typ">Typ:</label>
+        <InputSelect id="typ" class="form-control" @bind-Value="auto.Typ">
+            <option value="">Wählen Sie einen Typ...</option>
+            <option value="Limousine">Limousine</option>
+            <option value="SUV">SUV</option>
+            <!-- Weitere Optionen hier -->
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="baujahr">Baujahr:</label>
+        <InputNumber id="baujahr" class="form-control" @bind-Value="auto.Baujahr" />
+    </div>
+
+    <div class="form-group">
+        <label for="farbe">Farbe:</label>
+        <InputText id="farbe" class="form-control" @bind-Value="auto.Farbe" />
+    </div>
+
+    <div class="form-group">
+        <label for="kennzeichen">Kennzeichen:</label>
+        <InputText id="kennzeichen" class="form-control" @bind-Value="auto.Kennzeichen" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Speichern</button>
+    <button class="btn btn-secondary" @onclick="Cancel">Abbrechen</button>
+</EditForm>
+
+@code {
+    private Auto auto = new Auto();
+
+    private void HandleValidSubmit()
+    {
+        // Logik zum Speichern des Autos
+    }
+
+    private void Cancel()
+    {
+        // Logik zum Abbrechen der Operation
+    }
+}

@@ -7,15 +7,48 @@
 
 }else
 {
-        <div>
-            <h2>@auto.AutoId</h2>
-            <p>@auto.Fahrtenanbieter</p>
-            <p>@auto.Marke</p>
-            <p>@auto.Farbe</p>
-            <p>@auto.Kennzeichen</p>
-            <p>@auto.Baujahr</p>
-            <p>@auto.Typ</p>
-    </div>
+    <EditForm Model = "auto" OnValidSubmit="HandleUpdateCar">
+        <div class="mb-3">
+            <label for="id">AutoId: @auto.AutoId</label>
+        </div>
+        <div class="mb-3">
+            <label for="marke">Marke</label>
+            <InputText id="marke" @bind-Value="auto.Marke" class="form-control"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="modell">Modell</label>
+            <InputText id="modell" @bind-Value="auto.Modell" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="farbe">Farbe</label>
+            <InputText id="farbe" @bind-Value="auto.Farbe" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="kennzeichen">Kennzeichen</label>
+            <InputText id="kennzeichen" @bind-Value="auto.Kennzeichen" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="baujahr">Baujahr</label>
+            <InputDate id="baujahr" @bind-Value="auto.Baujahr" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="typ">Typ:</label>
+            <InputSelect id="typ" class="form-control" @bind-Value="auto.Typ">
+                <option value="">Wählen Sie einen Typ...</option>
+                <option value="Limousine">Limousine</option>
+                <option value="SUV">SUV</option>
+                <option value="Coupe">Coupe</option>
+            </InputSelect>
+        </div>
+
+        <button typeof="submit" class="btn btn-primary">Updaten</button>
+    </EditForm>
+
 }
 
 @code {
@@ -38,5 +71,10 @@
         {
             auto = result.Data;
         }
+    }
+
+    private void HandleUpdateCar()
+    {
+        Console.WriteLine("machnix");
     }
 }
