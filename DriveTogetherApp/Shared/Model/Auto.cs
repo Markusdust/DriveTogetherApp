@@ -10,7 +10,7 @@ namespace DriveTogetherApp.Shared.Model
     public class Auto
     {
         public int AutoId { get; set; } //  PK' 
-        //public string Fahrtenanbieter { get; set; }
+       
 
         // Fremdschlüssel für Benutzer
         public int BenutzerId { get; set; }

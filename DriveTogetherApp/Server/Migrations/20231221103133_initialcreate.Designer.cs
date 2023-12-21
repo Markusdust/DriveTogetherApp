@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231220164013_initialCreate")]
-    partial class initialCreate
+    [Migration("20231221103133_initialcreate")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,8 +36,7 @@ namespace DriveTogetherApp.Server.Migrations
                     b.Property<DateTime>("Baujahr")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("BenutzerId")
-                        .IsRequired()
+                    b.Property<int>("BenutzerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Farbe")
@@ -142,21 +141,69 @@ namespace DriveTogetherApp.Server.Migrations
                             Nachname = "Mustermann",
                             PasswortHash = new byte[0],
                             PasswortSalt = new byte[0],
-                            Registrierungsdatum = new DateTime(2023, 12, 20, 17, 40, 13, 354, DateTimeKind.Local).AddTicks(7394),
+                            Registrierungsdatum = new DateTime(2023, 12, 21, 11, 31, 32, 944, DateTimeKind.Local).AddTicks(6907),
                             Telefonnummer = "0123456789",
                             Vorname = "Max"
                         });
                 });
 
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Fahrt", b =>
+                {
+                    b.Property<int>("FahrtId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FahrtId"));
+
+                    b.Property<int>("AnzahlSitzplaetze")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AutoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BenutzerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Enddatum")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Preis")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Startdatum")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("FahrtId");
+
+                    b.HasIndex("AutoId");
+
+                    b.HasIndex("BenutzerId");
+
+                    b.ToTable("Fahrt");
+                });
+
             modelBuilder.Entity("DriveTogetherApp.Shared.Model.Auto", b =>
                 {
-                    b.HasOne("DriveTogetherApp.Shared.Model.Benutzer", "Benutzer")
+                    b.HasOne("DriveTogetherApp.Shared.Model.Benutzer", null)
                         .WithMany("Autos")
                         .HasForeignKey("BenutzerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Benutzer");
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Fahrt", b =>
+                {
+                    b.HasOne("DriveTogetherApp.Shared.Model.Auto", null)
+                        .WithMany()
+                        .HasForeignKey("AutoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DriveTogetherApp.Shared.Model.Benutzer", null)
+                        .WithMany()
+                        .HasForeignKey("BenutzerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DriveTogetherApp.Shared.Model.Benutzer", b =>

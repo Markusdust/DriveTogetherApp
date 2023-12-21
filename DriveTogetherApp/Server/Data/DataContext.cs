@@ -17,6 +17,18 @@ namespace DriveTogetherApp.Server.Data
                 .WithOne()
                 .HasForeignKey(a => a.BenutzerId);
 
+            modelBuilder.Entity<Fahrt>()
+               .HasOne<Benutzer>()
+               .WithMany()
+               .HasForeignKey(f => f.BenutzerId)
+               .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;
+
+            modelBuilder.Entity<Fahrt>()
+                .HasOne<Auto>()
+                .WithMany()
+                .HasForeignKey(f => f.AutoId)
+                .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;;
+
             modelBuilder.Entity<Benutzer>().HasData(
                new Benutzer
                {
@@ -24,8 +36,8 @@ namespace DriveTogetherApp.Server.Data
                    Vorname = "Max",
                    Nachname = "Mustermann",
                    Email = "max.mustermann@example.com",
-                   PasswortHash = new byte[0], // Ersetzen Sie dies durch einen echten Hash
-                   PasswortSalt = new byte[0], // Ersetzen Sie dies durch echten Salt
+                   PasswortHash = new byte[0], // veransshaulichung
+                   PasswortSalt = new byte[0], // veransshaulichung
                    Geburtsdatum = new DateTime(1990, 1, 1),
                    Telefonnummer = "0123456789",
                    Registrierungsdatum = DateTime.Now
@@ -43,7 +55,7 @@ namespace DriveTogetherApp.Server.Data
                     Kennzeichen = "B-MK 1234",
                     Baujahr = new DateTime(2018, 1, 1), // 1. Januar 2018 als Beispiel für das Baujahr
                     Typ = "SUV",
-                   
+
                 },
 
                new Auto
