@@ -13,11 +13,6 @@ namespace DriveTogetherApp.Server.Services.AutoService
 
         public async Task<ServiceResponse<Auto>> AddAuto(Auto auto)
         {
-            // Implementieren Sie die Logik zum Hinzufügen eines neuen Autos
-            // Beispiel:
-
-
-
             _context.Autos.Add(auto);
             await _context.SaveChangesAsync();
 
