@@ -1,6 +1,6 @@
 ﻿namespace DriveTogetherApp.Client.Services.FahrtService
 {
-    public class FahrtService
+    public class FahrtService : IFahrtService
     {
     }
 }

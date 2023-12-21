@@ -2,10 +2,12 @@ global using DriveTogetherApp.Shared;
 global using Microsoft.EntityFrameworkCore;
 global using DriveTogetherApp.Server.Data;
 global using DriveTogetherApp.Server.Services.AutoService;
+global using DriveTogetherApp.Server.Services.FahrtService;
 global using DriveTogetherApp.Server.Services.AuthService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAutoService, AutoService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFahrtService, FahrtService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
