@@ -1,4 +1,4 @@
-﻿@page "/createfahrt"
+﻿@page "/erstellen-fahrt"
 @using System.Security.Claims
 @inject IAutoService AutoService
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -32,6 +32,11 @@
                 <option value="@i">@i</option>
             }
         </InputSelect>
+    </div>
+    <div class="mb-3">
+        <label for="preis">Preis in CHF (max. 10CHF):</label>
+        <InputNumber id="preis" @bind-Value="fahrt.Preis" class="form-control" min="0" max="10" />
+
     </div>
 
     <div class="mb-3">
