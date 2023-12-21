@@ -1,0 +1,79 @@
+﻿@page "/createfahrt"
+@using System.Security.Claims
+@inject IAutoService AutoService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<EditForm Model="@fahrt" OnValidSubmit="HandleCreateFahrt">
+    <!-- Formularfelder für Fahrt-Details -->
+    <div class="mb-3">
+        <label for="startdatum">Startdatum:</label>
+        <InputDate id="startdatum" @bind-Value="fahrtDatum" />
+
+        <label for="startzeit">Startzeit:</label>
+        <input type="time" @bind="abfahrtZeit" @bind:format="HH:mm" />
+    </div>
+    
+    <div class="mb-3">
+        <label for="auto">Auto auswählen:</label>
+        <InputSelect class="form-control" @bind-Value="fahrt.AutoId">
+            <option value="">Bitte Auto auswählen</option>
+            @foreach (var auto in autos)
+            {
+                <option value="@auto.AutoId">@auto.Marke @auto.Modell</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label for="anzahlSitzplaetze">Anzahl Sitzplätze:</label>
+        <InputSelect id="anzahlSitzplaetze" @bind-Value="fahrt.AnzahlSitzplaetze">
+            @for (int i = 1; i <= 10; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Fahrt erstellen </button>
+    </div>
+
+    
+</EditForm>
+
+@code {
+    private Fahrt fahrt = new Fahrt();
+    private List<Auto> autos = new List<Auto>();
+
+    private DateTime fahrtDatum = new DateTime(2024, 1, 1); // Standardwert setzen
+    private DateTime abfahrtZeit;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            fahrt.BenutzerId = int.Parse(userId);
+
+            var responseAuto = await AutoService.GetAutosByUserId(userId);
+            if (responseAuto != null && responseAuto.Data != null)
+            {
+                autos = responseAuto.Data;
+            }
+
+            if (autos.Count > 0)
+            {
+                // Setzen Sie den Standardwert auf die ID des ersten Autos
+                fahrt.AutoId = autos[0].AutoId;
+            }
+        }
+    }
+
+    private async Task HandleCreateFahrt()
+    {
+        Console.WriteLine("buttonsubmit");
+        // Implementieren Sie die Logik zum Erstellen einer Fahrt
+    }
+}

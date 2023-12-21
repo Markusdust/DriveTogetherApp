@@ -12,7 +12,6 @@ namespace DriveTogetherApp.Shared.Model
         public int BenutzerId { get; set; } //FK
         public int AutoId { get; set; } //FK
         public DateTime Startdatum { get; set; }
-        public DateTime Enddatum { get; set; }
         public int AnzahlSitzplaetze { get; set; }
         public decimal Preis { get; set; }
 
