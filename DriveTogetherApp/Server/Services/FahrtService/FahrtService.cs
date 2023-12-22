@@ -1,5 +1,4 @@
-﻿using DriveTogetherApp.Client.Pages;
-using DriveTogetherApp.Shared.Model;
+﻿using DriveTogetherApp.Shared.Model;
 
 namespace DriveTogetherApp.Server.Services.FahrtService
 {
@@ -23,7 +22,11 @@ namespace DriveTogetherApp.Server.Services.FahrtService
         public async Task<ServiceResponse<Fahrt>> GetFahrtAsync(int fahrtId)
         {
             var response = new ServiceResponse<Fahrt>();
-            var fahrt = await _context.Fahrten.FindAsync(fahrtId);
+            var fahrt = await _context.Fahrten
+                                    .Include(f => f.AbfahrtAdresse)
+                                    .Include(f => f.AnkunftAdresse)
+                                    .FirstOrDefaultAsync(f => f.FahrtId == fahrtId);
+
             if (fahrt == null)
             {
                 response.Success = false;
