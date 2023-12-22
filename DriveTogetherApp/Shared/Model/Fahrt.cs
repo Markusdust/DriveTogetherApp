@@ -15,7 +15,14 @@ namespace DriveTogetherApp.Shared.Model
         public int AnzahlSitzplaetze { get; set; }
         public decimal Preis { get; set; }
         public bool Storniert { get; set; }
-        
+
+        // Referenzen auf die Adresse-Entität
+        public int AbfahrtAdresseId { get; set; }
+        public Adresse AbfahrtAdresse { get; set; }
+
+        public int AnkunftAdresseId { get; set; }
+        public Adresse AnkunftAdresse { get; set; }
+
 
         /*
         // Navigationseigenschaften

@@ -29,6 +29,16 @@ namespace DriveTogetherApp.Server.Data
                 .HasForeignKey(f => f.AutoId)
                 .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;;
 
+            modelBuilder.Entity<Fahrt>()
+            .HasOne(f => f.AbfahrtAdresse)
+            .WithMany()
+            .HasForeignKey(f => f.AbfahrtAdresseId);
+
+            modelBuilder.Entity<Fahrt>()
+                .HasOne(f => f.AnkunftAdresse)
+                .WithMany()
+                .HasForeignKey(f => f.AnkunftAdresseId);
+
             modelBuilder.Entity<Benutzer>().HasData(
                new Benutzer
                {
@@ -75,5 +85,6 @@ namespace DriveTogetherApp.Server.Data
         public DbSet<Auto> Autos { get; set; }
         public DbSet<Benutzer> Benutzers { get; set; }
         public DbSet<Fahrt> Fahrten { get; set; }
+        public DbSet<Adresse> Adressen { get; set; }
     }
 }
