@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231221103133_initialcreate")]
-    partial class initialcreate
+    [Migration("20231222121304_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,7 +141,7 @@ namespace DriveTogetherApp.Server.Migrations
                             Nachname = "Mustermann",
                             PasswortHash = new byte[0],
                             PasswortSalt = new byte[0],
-                            Registrierungsdatum = new DateTime(2023, 12, 21, 11, 31, 32, 944, DateTimeKind.Local).AddTicks(6907),
+                            Registrierungsdatum = new DateTime(2023, 12, 22, 13, 13, 4, 520, DateTimeKind.Local).AddTicks(9390),
                             Telefonnummer = "0123456789",
                             Vorname = "Max"
                         });
@@ -164,14 +164,14 @@ namespace DriveTogetherApp.Server.Migrations
                     b.Property<int>("BenutzerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Enddatum")
-                        .HasColumnType("datetime2");
-
                     b.Property<decimal>("Preis")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Startdatum")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Storniert")
+                        .HasColumnType("bit");
 
                     b.HasKey("FahrtId");
 

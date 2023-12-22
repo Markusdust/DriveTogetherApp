@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DriveTogetherApp.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class initialcreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,9 +67,9 @@ namespace DriveTogetherApp.Server.Migrations
                     BenutzerId = table.Column<int>(type: "int", nullable: false),
                     AutoId = table.Column<int>(type: "int", nullable: false),
                     Startdatum = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Enddatum = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AnzahlSitzplaetze = table.Column<int>(type: "int", nullable: false),
-                    Preis = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Preis = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Storniert = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,7 +89,7 @@ namespace DriveTogetherApp.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Benutzers",
                 columns: new[] { "BenutzerId", "Email", "Geburtsdatum", "Nachname", "PasswortHash", "PasswortSalt", "Registrierungsdatum", "Telefonnummer", "Vorname" },
-                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 21, 11, 31, 32, 944, DateTimeKind.Local).AddTicks(6907), "0123456789", "Max" });
+                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 22, 13, 13, 4, 520, DateTimeKind.Local).AddTicks(9390), "0123456789", "Max" });
 
             migrationBuilder.InsertData(
                 table: "Autos",

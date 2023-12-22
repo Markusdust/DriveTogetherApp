@@ -14,7 +14,7 @@ namespace DriveTogetherApp.Shared.Model
         public DateTime Startdatum { get; set; }
         public int AnzahlSitzplaetze { get; set; }
         public decimal Preis { get; set; }
-
+        public bool Storniert { get; set; }
         
 
         /*
