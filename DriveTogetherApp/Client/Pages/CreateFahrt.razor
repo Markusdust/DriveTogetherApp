@@ -1,6 +1,7 @@
 ﻿@page "/erstellen-fahrt"
 @using System.Security.Claims
 @inject IAutoService AutoService
+@inject IFahrtService FahrtService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <EditForm Model="@fahrt" OnValidSubmit="HandleCreateFahrt">
@@ -49,6 +50,7 @@
 @code {
     private Fahrt fahrt = new Fahrt();
     private List<Auto> autos = new List<Auto>();
+    private string message = string.Empty;
 
     private DateTime fahrtDatum = new DateTime(2024, 1, 1); // Standardwert setzen
     private DateTime abfahrtZeit;
@@ -79,6 +81,17 @@
     private async Task HandleCreateFahrt()
     {
         Console.WriteLine("buttonsubmit");
-        // Implementieren Sie die Logik zum Erstellen einer Fahrt
+
+        fahrt.Startdatum = new DateTime(fahrtDatum.Year, fahrtDatum.Month, fahrtDatum.Day, abfahrtZeit.Hour, abfahrtZeit.Minute, 0);
+        fahrt.Storniert = false;
+        var result = await FahrtService.CreateFahrt(fahrt);
+        if (result != null && result.Success)
+        {
+            message = "Fahrt erfolgreich erstellt.";
+        }
+        else
+        {
+            message = "Fehler: " + result.Message;
+        }
     }
 }

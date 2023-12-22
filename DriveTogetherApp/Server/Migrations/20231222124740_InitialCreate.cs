@@ -59,7 +59,7 @@ namespace DriveTogetherApp.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Fahrt",
+                name: "Fahrten",
                 columns: table => new
                 {
                     FahrtId = table.Column<int>(type: "int", nullable: false)
@@ -73,14 +73,14 @@ namespace DriveTogetherApp.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Fahrt", x => x.FahrtId);
+                    table.PrimaryKey("PK_Fahrten", x => x.FahrtId);
                     table.ForeignKey(
-                        name: "FK_Fahrt_Autos_AutoId",
+                        name: "FK_Fahrten_Autos_AutoId",
                         column: x => x.AutoId,
                         principalTable: "Autos",
                         principalColumn: "AutoId");
                     table.ForeignKey(
-                        name: "FK_Fahrt_Benutzers_BenutzerId",
+                        name: "FK_Fahrten_Benutzers_BenutzerId",
                         column: x => x.BenutzerId,
                         principalTable: "Benutzers",
                         principalColumn: "BenutzerId");
@@ -89,7 +89,7 @@ namespace DriveTogetherApp.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Benutzers",
                 columns: new[] { "BenutzerId", "Email", "Geburtsdatum", "Nachname", "PasswortHash", "PasswortSalt", "Registrierungsdatum", "Telefonnummer", "Vorname" },
-                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 22, 13, 13, 4, 520, DateTimeKind.Local).AddTicks(9390), "0123456789", "Max" });
+                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 22, 13, 47, 40, 869, DateTimeKind.Local).AddTicks(839), "0123456789", "Max" });
 
             migrationBuilder.InsertData(
                 table: "Autos",
@@ -106,13 +106,13 @@ namespace DriveTogetherApp.Server.Migrations
                 column: "BenutzerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fahrt_AutoId",
-                table: "Fahrt",
+                name: "IX_Fahrten_AutoId",
+                table: "Fahrten",
                 column: "AutoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fahrt_BenutzerId",
-                table: "Fahrt",
+                name: "IX_Fahrten_BenutzerId",
+                table: "Fahrten",
                 column: "BenutzerId");
         }
 
@@ -120,7 +120,7 @@ namespace DriveTogetherApp.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Fahrt");
+                name: "Fahrten");
 
             migrationBuilder.DropTable(
                 name: "Autos");
