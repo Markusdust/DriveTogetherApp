@@ -52,8 +52,8 @@
     private List<Auto> autos = new List<Auto>();
     private string message = string.Empty;
 
-    private DateTime fahrtDatum = new DateTime(2024, 1, 1); // Standardwert setzen
-    private DateTime abfahrtZeit;
+    private DateTime fahrtDatum = DateTime.Today; // Setzt das aktuelle Datum
+    private DateTime abfahrtZeit = DateTime.Now; // Setzt die aktuelle Uhrzeit
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,8 +81,8 @@
     private async Task HandleCreateFahrt()
     {
         Console.WriteLine("buttonsubmit");
-
-        fahrt.Startdatum = new DateTime(fahrtDatum.Year, fahrtDatum.Month, fahrtDatum.Day, abfahrtZeit.Hour, abfahrtZeit.Minute, 0);
+        fahrt.Startdatum = new DateTime(fahrtDatum.Year, fahrtDatum.Month, fahrtDatum.Day, abfahrtZeit.Hour, abfahrtZeit.Minute, abfahrtZeit.Second);
+        Console.WriteLine(fahrt.Startdatum);
         fahrt.Storniert = false;
         var result = await FahrtService.CreateFahrt(fahrt);
         if (result != null && result.Success)
