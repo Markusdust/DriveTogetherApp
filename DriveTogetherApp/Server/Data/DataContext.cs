@@ -32,12 +32,14 @@ namespace DriveTogetherApp.Server.Data
             modelBuilder.Entity<Fahrt>()
             .HasOne(f => f.AbfahrtAdresse)
             .WithMany()
-            .HasForeignKey(f => f.AbfahrtAdresseId);
+            .HasForeignKey(f => f.AbfahrtAdresseId)
+            .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;;
 
             modelBuilder.Entity<Fahrt>()
                 .HasOne(f => f.AnkunftAdresse)
                 .WithMany()
-                .HasForeignKey(f => f.AnkunftAdresseId);
+                .HasForeignKey(f => f.AnkunftAdresseId)
+                .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;;
 
             modelBuilder.Entity<Benutzer>().HasData(
                new Benutzer

@@ -22,6 +22,39 @@ namespace DriveTogetherApp.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Adresse", b =>
+                {
+                    b.Property<int>("AdresseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdresseId"));
+
+                    b.Property<string>("Hausnummer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Land")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PLZ")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Stadt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Strasse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AdresseId");
+
+                    b.ToTable("Adressen");
+                });
+
             modelBuilder.Entity("DriveTogetherApp.Shared.Model.Auto", b =>
                 {
                     b.Property<int>("AutoId")
@@ -138,7 +171,7 @@ namespace DriveTogetherApp.Server.Migrations
                             Nachname = "Mustermann",
                             PasswortHash = new byte[0],
                             PasswortSalt = new byte[0],
-                            Registrierungsdatum = new DateTime(2023, 12, 22, 13, 47, 40, 869, DateTimeKind.Local).AddTicks(839),
+                            Registrierungsdatum = new DateTime(2023, 12, 22, 14, 51, 24, 674, DateTimeKind.Local).AddTicks(3729),
                             Telefonnummer = "0123456789",
                             Vorname = "Max"
                         });
@@ -151,6 +184,12 @@ namespace DriveTogetherApp.Server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FahrtId"));
+
+                    b.Property<int>("AbfahrtAdresseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AnkunftAdresseId")
+                        .HasColumnType("int");
 
                     b.Property<int>("AnzahlSitzplaetze")
                         .HasColumnType("int");
@@ -172,6 +211,10 @@ namespace DriveTogetherApp.Server.Migrations
 
                     b.HasKey("FahrtId");
 
+                    b.HasIndex("AbfahrtAdresseId");
+
+                    b.HasIndex("AnkunftAdresseId");
+
                     b.HasIndex("AutoId");
 
                     b.HasIndex("BenutzerId");
@@ -190,6 +233,18 @@ namespace DriveTogetherApp.Server.Migrations
 
             modelBuilder.Entity("DriveTogetherApp.Shared.Model.Fahrt", b =>
                 {
+                    b.HasOne("DriveTogetherApp.Shared.Model.Adresse", "AbfahrtAdresse")
+                        .WithMany()
+                        .HasForeignKey("AbfahrtAdresseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DriveTogetherApp.Shared.Model.Adresse", "AnkunftAdresse")
+                        .WithMany()
+                        .HasForeignKey("AnkunftAdresseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("DriveTogetherApp.Shared.Model.Auto", null)
                         .WithMany()
                         .HasForeignKey("AutoId")
@@ -201,6 +256,10 @@ namespace DriveTogetherApp.Server.Migrations
                         .HasForeignKey("BenutzerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("AbfahrtAdresse");
+
+                    b.Navigation("AnkunftAdresse");
                 });
 
             modelBuilder.Entity("DriveTogetherApp.Shared.Model.Benutzer", b =>

@@ -14,6 +14,23 @@ namespace DriveTogetherApp.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Adressen",
+                columns: table => new
+                {
+                    AdresseId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Strasse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Hausnummer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PLZ = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Stadt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Land = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Adressen", x => x.AdresseId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Benutzers",
                 columns: table => new
                 {
@@ -69,11 +86,23 @@ namespace DriveTogetherApp.Server.Migrations
                     Startdatum = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AnzahlSitzplaetze = table.Column<int>(type: "int", nullable: false),
                     Preis = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Storniert = table.Column<bool>(type: "bit", nullable: false)
+                    Storniert = table.Column<bool>(type: "bit", nullable: false),
+                    AbfahrtAdresseId = table.Column<int>(type: "int", nullable: false),
+                    AnkunftAdresseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fahrten", x => x.FahrtId);
+                    table.ForeignKey(
+                        name: "FK_Fahrten_Adressen_AbfahrtAdresseId",
+                        column: x => x.AbfahrtAdresseId,
+                        principalTable: "Adressen",
+                        principalColumn: "AdresseId");
+                    table.ForeignKey(
+                        name: "FK_Fahrten_Adressen_AnkunftAdresseId",
+                        column: x => x.AnkunftAdresseId,
+                        principalTable: "Adressen",
+                        principalColumn: "AdresseId");
                     table.ForeignKey(
                         name: "FK_Fahrten_Autos_AutoId",
                         column: x => x.AutoId,
@@ -89,7 +118,7 @@ namespace DriveTogetherApp.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Benutzers",
                 columns: new[] { "BenutzerId", "Email", "Geburtsdatum", "Nachname", "PasswortHash", "PasswortSalt", "Registrierungsdatum", "Telefonnummer", "Vorname" },
-                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 22, 13, 47, 40, 869, DateTimeKind.Local).AddTicks(839), "0123456789", "Max" });
+                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 22, 14, 51, 24, 674, DateTimeKind.Local).AddTicks(3729), "0123456789", "Max" });
 
             migrationBuilder.InsertData(
                 table: "Autos",
@@ -104,6 +133,16 @@ namespace DriveTogetherApp.Server.Migrations
                 name: "IX_Autos_BenutzerId",
                 table: "Autos",
                 column: "BenutzerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fahrten_AbfahrtAdresseId",
+                table: "Fahrten",
+                column: "AbfahrtAdresseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fahrten_AnkunftAdresseId",
+                table: "Fahrten",
+                column: "AnkunftAdresseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Fahrten_AutoId",
@@ -121,6 +160,9 @@ namespace DriveTogetherApp.Server.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Fahrten");
+
+            migrationBuilder.DropTable(
+                name: "Adressen");
 
             migrationBuilder.DropTable(
                 name: "Autos");

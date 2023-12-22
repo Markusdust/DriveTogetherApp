@@ -6,6 +6,7 @@
 
 <EditForm Model="@fahrt" OnValidSubmit="HandleCreateFahrt">
     <!-- Formularfelder für Fahrt-Details -->
+    <h3>Abfahrtszeit</h3>
     <div class="mb-3">
         <label for="startdatum">Startdatum:</label>
         <InputDate id="startdatum" @bind-Value="fahrtDatum" />
@@ -34,6 +35,25 @@
             }
         </InputSelect>
     </div>
+
+    <h3>Abfahrtsadresse</h3>
+    <div class="mb-3">
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Strasse" placeholder="Strasse" />
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Hausnummer" placeholder="Hausnummer" />
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.PLZ" placeholder="PLZ" />
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Stadt" placeholder="Stadt" />
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Land" placeholder="Land" />
+    </div>
+
+    <h3>Ankunftsadresse</h3>
+    <div class="mb-3">
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Strasse" placeholder="Strasse" />
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Hausnummer" placeholder="Hausnummer" />
+        <InputText @bind-Value="fahrt.AnkunftAdresse.PLZ" placeholder="PLZ" />
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Stadt" placeholder="Stadt" />
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Land" placeholder="Land" />
+    </div>
+
     <div class="mb-3">
         <label for="preis">Preis in CHF (max. 10CHF):</label>
         <InputNumber id="preis" @bind-Value="fahrt.Preis" class="form-control" min="0" max="10" />
@@ -49,6 +69,7 @@
 
 @code {
     private Fahrt fahrt = new Fahrt();
+
     private List<Auto> autos = new List<Auto>();
     private string message = string.Empty;
 
@@ -57,6 +78,9 @@
 
     protected override async Task OnInitializedAsync()
     {
+        fahrt.AbfahrtAdresse = new Adresse(); // Initialisierung der AbfahrtAdresse
+        fahrt.AnkunftAdresse = new Adresse(); // Initialisierung der AnkunftAdresse
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         if (user.Identity.IsAuthenticated)
