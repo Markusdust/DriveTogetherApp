@@ -1,4 +1,5 @@
-﻿using DriveTogetherApp.Shared.Model;
+﻿using DriveTogetherApp.Client.Pages;
+using DriveTogetherApp.Shared.Model;
 
 namespace DriveTogetherApp.Server.Services.FahrtService
 {
@@ -17,6 +18,23 @@ namespace DriveTogetherApp.Server.Services.FahrtService
             await _context.SaveChangesAsync();
 
             return new ServiceResponse<Fahrt> { Data = fahrt };
+        }
+
+        public async Task<ServiceResponse<Fahrt>> GetFahrtAsync(int fahrtId)
+        {
+            var response = new ServiceResponse<Fahrt>();
+            var fahrt = await _context.Fahrten.FindAsync(fahrtId);
+            if (fahrt == null)
+            {
+                response.Success = false;
+                response.Message = "Fahrt existiert nicht.";
+            }
+            else
+            {
+                response.Data = fahrt;
+            }
+
+            return response;
         }
     }
 }

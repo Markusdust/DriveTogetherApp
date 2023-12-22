@@ -1,0 +1,73 @@
+﻿@page "/fahrt/TEST"
+@inject IFahrtService FahrtService
+
+
+    <EditForm Model="fahrt" OnValidSubmit="HandleUpdateFahrt">
+        <h3>Fahrt Details (ID: @fahrt.FahrtId)</h3>
+        <div class="mb-3">
+            <label for="startdatum">Startdatum:</label>
+            <InputDate id="startdatum" @bind-Value="fahrt.Startdatum" />
+        </div>
+
+       @*  <div class="mb-3">
+            <label for="startzeit">Startzeit:</label>
+            <input type="time" id="startdatum" @bind-Value="fahrt.Startdatum" @bind:format="HH:mm" />
+        </div>
+ 
+        <div class="mb-3">
+            <label for="abfahrtAdresse">Abfahrtsadresse:</label>
+            <InputText id="abfahrtAdresse" @bind-Value="fahrt.AbfahrtAdresse" />
+        </div>
+
+        <div class="mb-3">
+            <label for="ankunftAdresse">Ankunftsadresse:</label>
+            <InputText id="ankunftAdresse" @bind-Value="fahrt.AnkunftAdresse" />
+        </div>
+        *@
+        <!-- Weitere Felder für die Fahrt, wie Anzahl Sitzplätze, Preis, usw. -->
+
+        <button type="submit" class="btn btn-primary">Aktualisieren</button>
+    </EditForm>
+
+@*     @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-success">@message</div>
+    } *@
+
+
+@code {
+    private Fahrt? fahrt = new Fahrt();
+    private string message = "Lade Fahrt...";
+
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("TEST");
+        var result = await FahrtService.GetFahrt(1);
+        if (!result.Success)
+        {
+            message = result.Message;
+        }
+        else
+        {
+            fahrt = result.Data;
+        }
+    }
+
+    private async Task HandleUpdateFahrt()
+    {
+        Console.WriteLine("updatesubmit");
+        // var result = await FahrtService.UpdateFahrt(fahrt);
+        // if (result.Success)
+        // {
+        //     message = "Fahrt erfolgreich aktualisiert.";
+        // }
+        // else
+        // {
+        //     message = "Fehler beim Aktualisieren der Fahrt: " + result.Message;
+        // }
+    }
+}

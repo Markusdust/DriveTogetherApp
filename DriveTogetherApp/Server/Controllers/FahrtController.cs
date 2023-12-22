@@ -24,5 +24,13 @@ namespace DriveTogetherApp.Server.Controllers
             }
             return Ok(serviceResponse);
         }
+
+
+        [HttpGet("{fahrtId}")]
+        public async Task<ActionResult<ServiceResponse<Fahrt>>> GetFahrt(int fahrtId)
+        {
+            var result = await _fahrtService.GetFahrtAsync(fahrtId);
+            return Ok(result);
+        }
     }
 }

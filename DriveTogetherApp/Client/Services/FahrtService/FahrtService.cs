@@ -1,4 +1,5 @@
-﻿using DriveTogetherApp.Shared.Model;
+﻿using DriveTogetherApp.Client.Pages;
+using DriveTogetherApp.Shared.Model;
 using System.Net.Http.Json;
 
 namespace DriveTogetherApp.Client.Services.FahrtService
@@ -14,6 +15,12 @@ namespace DriveTogetherApp.Client.Services.FahrtService
         {
             var response = await _http.PostAsJsonAsync("api/fahrt", fahrt);
             return await response.Content.ReadFromJsonAsync<ServiceResponse<Fahrt>>();
+        }
+
+        public async Task<ServiceResponse<Fahrt>> GetFahrt(int fahrtId)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<Fahrt>>($"api/fahrt/{fahrtId}");
+            return result;
         }
     }
 }

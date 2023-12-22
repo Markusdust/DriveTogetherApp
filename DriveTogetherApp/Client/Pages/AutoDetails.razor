@@ -48,7 +48,10 @@
 
         <button type="submit" class="btn btn-primary">Updaten</button>
     </EditForm>
-
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-success">@message</div>
+    }
 }
 
 @code {
