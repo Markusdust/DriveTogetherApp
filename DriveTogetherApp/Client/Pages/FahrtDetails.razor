@@ -1,32 +1,66 @@
 ﻿@page "/fahrt/TEST"
+@using System.Security.Claims
 @inject IFahrtService FahrtService
-
+@inject IAutoService AutoService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime;
 
     <EditForm Model="fahrt" OnValidSubmit="HandleUpdateFahrt">
         <h3>Fahrt Details (ID: @fahrt.FahrtId)</h3>
         <div class="mb-3">
             <label for="startdatum">Startdatum:</label>
-            <InputDate id="startdatum" @bind-Value="fahrt.Startdatum" />
+        <InputDate id="startdatum" @bind-Value="fahrtDatum" />
+
+        <label for="startzeit">Startzeit:</label>
+        <input type="time" @bind="abfahrtZeit" @bind:format="HH:mm" />
+
         </div>
 
-       @*  <div class="mb-3">
-            <label for="startzeit">Startzeit:</label>
-            <input type="time" id="startdatum" @bind-Value="fahrt.Startdatum" @bind:format="HH:mm" />
-        </div>
- 
-        <div class="mb-3">
-            <label for="abfahrtAdresse">Abfahrtsadresse:</label>
-            <InputText id="abfahrtAdresse" @bind-Value="fahrt.AbfahrtAdresse" />
-        </div>
+    <div class="mb-3">
+        <label for="auto">Auto auswählen:</label>
+        <InputSelect class="form-control" @bind-Value="fahrt.AutoId">
+            @foreach (var auto in autos)
+            {
+                <option value="@auto.AutoId">@auto.Marke @auto.Modell</option>
+            }
+        </InputSelect>
+    </div>
 
-        <div class="mb-3">
-            <label for="ankunftAdresse">Ankunftsadresse:</label>
-            <InputText id="ankunftAdresse" @bind-Value="fahrt.AnkunftAdresse" />
-        </div>
-        *@
-        <!-- Weitere Felder für die Fahrt, wie Anzahl Sitzplätze, Preis, usw. -->
+    <div class="mb-3">
+        <label for="anzahlSitzplaetze">Anzahl Sitzplätze:</label>
+        <InputSelect id="anzahlSitzplaetze" @bind-Value="fahrt.AnzahlSitzplaetze">
+            @for (int i = 1; i <= 10; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </InputSelect>
+    </div>
+    
+    <h3>Abfahrtsadresse</h3>
+    <div class="mb-3">
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Strasse"/>
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Hausnummer"/>
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.PLZ"/>
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Stadt"/>
+        <InputText @bind-Value="fahrt.AbfahrtAdresse.Land"/>
+    </div>
+
+    <h3>Ankunftsadresse</h3>
+    <div class="mb-3">
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Strasse"/>
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Hausnummer"/>
+        <InputText @bind-Value="fahrt.AnkunftAdresse.PLZ"/>
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Stadt"/>
+        <InputText @bind-Value="fahrt.AnkunftAdresse.Land" />
+    </div>
+
+    <div class="mb-3">
+        <label for="preis">Preis in CHF (max. 10CHF):</label>
+        <InputNumber id="preis" @bind-Value="fahrt.Preis" class="form-control" min="0" max="10" />
+    </div> 
 
         <button type="submit" class="btn btn-primary">Aktualisieren</button>
+    <button type="button" class="btn btn-warning" @onclick="ConfirmStornierung">Fahrt Stornieren</button>
     </EditForm>
 
 @*     @if (!string.IsNullOrEmpty(message))
@@ -37,29 +71,51 @@
 
 @code {
     private Fahrt? fahrt = new Fahrt();
+
+    private List<Auto> autos = new List<Auto>();
     private string message = "Lade Fahrt...";
 
+    private DateTime fahrtDatum = DateTime.Today; // Setzt das aktuelle Datum
+    private DateTime abfahrtZeit = DateTime.Now; // Setzt die aktuelle Uhrzeit
 
     [Parameter]
     public int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("TEST");
-        var result = await FahrtService.GetFahrt(1);
-        if (!result.Success)
+        fahrt.AbfahrtAdresse = new Adresse(); // Initialisierung der AbfahrtAdresse
+        fahrt.AnkunftAdresse = new Adresse(); // Initialisierung der AnkunftAdresse
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
         {
-            message = result.Message;
+            var result = await FahrtService.GetFahrt(1);
+            if (!result.Success)
+            {
+                message = result.Message;
+            }
+            else
+            {
+                fahrt = result.Data;
+                fahrtDatum = result.Data.Startdatum;
+                abfahrtZeit = result.Data.Startdatum;
+                fahrt.AbfahrtAdresse = result.Data.AbfahrtAdresse;
+                fahrt.AnkunftAdresse = result.Data.AnkunftAdresse;
+                await SetAutoList(user);
+            }
+            Console.WriteLine(fahrt.AbfahrtAdresse.Strasse);
         }
-        else
-        {
-            fahrt = result.Data;
-        }
+
     }
 
     private async Task HandleUpdateFahrt()
     {
         Console.WriteLine("updatesubmit");
+
+        //fahrt.Startdatum = new DateTime(fahrtDatum.Year, fahrtDatum.Month, fahrtDatum.Day, abfahrtZeit.Hour, abfahrtZeit.Minute, abfahrtZeit.Second);
+
         // var result = await FahrtService.UpdateFahrt(fahrt);
         // if (result.Success)
         // {
@@ -69,5 +125,32 @@
         // {
         //     message = "Fehler beim Aktualisieren der Fahrt: " + result.Message;
         // }
+    }
+
+    private async Task CancelFahrt()
+    {
+        Console.WriteLine("Storniervorgang");
+        fahrt.Storniert = true;
+
+        HandleUpdateFahrt();
+    }
+
+    private async Task SetAutoList(ClaimsPrincipal user)
+    {
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var responseAuto = await AutoService.GetAutosByUserId(userId);
+        if (responseAuto != null && responseAuto.Data != null)
+        {
+            autos = responseAuto.Data;
+        }
+    }
+
+    private async Task ConfirmStornierung()
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Möchten Sie die Fahrt wirklich stornieren?");
+        if (confirmed)
+        {
+            CancelFahrt();
+        }
     }
 }
