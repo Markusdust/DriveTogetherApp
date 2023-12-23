@@ -67,7 +67,7 @@ else
             var response = await FahrtService.GetFahrtenByUserId(userId);
             if (response != null && response.Data != null)
             {
-                fahrten = response.Data;
+                fahrten = response.Data.OrderByDescending(f => f.Startdatum).ToList();
             }
         }
 

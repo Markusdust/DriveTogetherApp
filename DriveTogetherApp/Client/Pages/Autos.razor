@@ -11,16 +11,30 @@
 }
 else
 {
-    @foreach (var auto in autos)
-    {
-        <div>
-            <a href="/auto/@auto.AutoId">
-                <h4 class="mb-0">ID: @auto.AutoId</h4>
-            </a>
-            <p><strong>Marke:</strong> @auto.Marke</p>
-            <p><strong>Modell:</strong> @auto.Modell</p>
-        </div>
-    }
+    <h4>Meine Autos</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Marke</th>
+                <th>Modell</th>
+                <!-- Weitere Spalten nach Bedarf -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var auto in autos)
+            {
+                <tr>
+                    <td>
+                        <a href="/auto/@auto.AutoId">@auto.AutoId</a>
+                    </td>
+                    <td>@auto.Marke</td>
+                    <td>@auto.Modell</td>
+                    <!-- Weitere Zellen nach Bedarf -->
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 
