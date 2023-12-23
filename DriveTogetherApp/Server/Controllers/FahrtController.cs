@@ -32,5 +32,18 @@ namespace DriveTogetherApp.Server.Controllers
             var result = await _fahrtService.GetFahrtAsync(fahrtId);
             return Ok(result);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateFahrt([FromBody] Fahrt fahrt)
+        {
+            var serviceResponse = await _fahrtService.UpdateFahrt(fahrt);
+
+            if (!serviceResponse.Success)
+            {
+                return BadRequest(serviceResponse.Message);
+            }
+
+            return Ok(serviceResponse);
+        }
     }
 }

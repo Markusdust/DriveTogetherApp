@@ -114,17 +114,17 @@
     {
         Console.WriteLine("updatesubmit");
 
-        //fahrt.Startdatum = new DateTime(fahrtDatum.Year, fahrtDatum.Month, fahrtDatum.Day, abfahrtZeit.Hour, abfahrtZeit.Minute, abfahrtZeit.Second);
+        fahrt.Startdatum = new DateTime(fahrtDatum.Year, fahrtDatum.Month, fahrtDatum.Day, abfahrtZeit.Hour, abfahrtZeit.Minute, abfahrtZeit.Second);
 
-        // var result = await FahrtService.UpdateFahrt(fahrt);
-        // if (result.Success)
-        // {
-        //     message = "Fahrt erfolgreich aktualisiert.";
-        // }
-        // else
-        // {
-        //     message = "Fehler beim Aktualisieren der Fahrt: " + result.Message;
-        // }
+        var result = await FahrtService.UpdateFahrt(fahrt);
+        if (result.Success)
+        {
+            message = "Fahrt erfolgreich aktualisiert.";
+        }
+        else
+        {
+            message = "Fehler beim Aktualisieren der Fahrt: " + result.Message;
+        }
     }
 
     private async Task CancelFahrt()

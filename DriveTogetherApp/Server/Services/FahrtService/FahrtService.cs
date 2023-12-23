@@ -39,5 +39,11 @@ namespace DriveTogetherApp.Server.Services.FahrtService
 
             return response;
         }
+
+        public async Task<ServiceResponse<Fahrt>> UpdateFahrt(Fahrt fahrt)
+        {
+            var serviceResponse = new ServiceResponse<Fahrt>();
+
+        }
     }
 }
