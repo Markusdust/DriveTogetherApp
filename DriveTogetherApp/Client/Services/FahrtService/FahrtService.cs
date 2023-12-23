@@ -23,6 +23,12 @@ namespace DriveTogetherApp.Client.Services.FahrtService
             return result;
         }
 
+        public async Task<ServiceResponse<List<Fahrt>>> GetFahrtenByUserId(string userId)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<Fahrt>>>($"api/fahrt/user/{userId}");
+            return result;
+        }
+
         public async Task<ServiceResponse<Fahrt>> UpdateFahrt(Fahrt fahrt)
         {
             var response = await _http.PutAsJsonAsync($"api/fahrt/{fahrt.FahrtId}", fahrt);

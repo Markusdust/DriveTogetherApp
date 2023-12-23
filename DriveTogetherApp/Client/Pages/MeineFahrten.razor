@@ -1,0 +1,76 @@
+﻿@page "/meine-fahrten"
+@using System.Security.Claims
+@inject IFahrtService FahrtService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@if (fahrten == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h4>Meine Fahrten</h4>
+      <table class="table">
+        <thead>
+            <tr>
+                <th>Fahrt ID</th>
+                <th>Startdatum</th>
+                <th>Abfahrtadresse</th>
+                <th>Ankunftadresse</th>
+                <th>Storniert</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+                @foreach (var fahrt in fahrten)
+            {
+                <tr>
+                    <td><a href="/fahrt/@fahrt.FahrtId">@fahrt.FahrtId</a>
+                     </td>
+                    
+                    <td>@fahrt.Startdatum.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        @if (fahrt.AbfahrtAdresse != null)
+                        {
+                            <div>@fahrt.AbfahrtAdresse.Strasse , @fahrt.AbfahrtAdresse.Hausnummer</div>
+                            <div>@fahrt.AbfahrtAdresse.PLZ  , @fahrt.AbfahrtAdresse.Stadt</div>
+                            <div>@fahrt.AbfahrtAdresse.Land</div>
+                        }
+                    </td>
+                    <td>
+                        @if (fahrt.AnkunftAdresse != null)
+                        {
+                            <div>@fahrt.AnkunftAdresse.Strasse , @fahrt.AnkunftAdresse.Hausnummer</div>
+                            <div>@fahrt.AnkunftAdresse.PLZ , @fahrt.AnkunftAdresse.Stadt</div>
+                            <div>@fahrt.AnkunftAdresse.Land</div>
+                        }
+                    </td>
+                    <td>@(fahrt.Storniert ? "Ja" : "Nein")</td>
+                </tr>
+            }
+       
+        </tbody>
+    </table>  
+}
+
+@code {
+    private List<Fahrt> fahrten;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var response = await FahrtService.GetFahrtenByUserId(userId);
+            if (response != null && response.Data != null)
+            {
+                fahrten = response.Data;
+            }
+        }
+
+        
+    }
+}
