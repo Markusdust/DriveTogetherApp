@@ -11,7 +11,7 @@
             <label for="startdatum">Startdatum:</label>
         <InputDate id="startdatum" @bind-Value="fahrtDatum" />
 
-        <label for="startzeit">Startzeit:</label>
+        <label for="abfahrtZeit">Startzeit:</label>
         <input type="time" @bind="abfahrtZeit" @bind:format="HH:mm" />
 
         </div>
@@ -75,8 +75,8 @@
     private List<Auto> autos = new List<Auto>();
     private string message = "Lade Fahrt...";
 
-    private DateTime fahrtDatum = DateTime.Today; // Setzt das aktuelle Datum
-    private DateTime abfahrtZeit = DateTime.Now; // Setzt die aktuelle Uhrzeit
+    private DateTime fahrtDatum;
+    private DateTime abfahrtZeit;
 
     [Parameter]
     public int Id { get; set; }

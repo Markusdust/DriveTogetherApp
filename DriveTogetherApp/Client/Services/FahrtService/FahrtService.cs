@@ -29,5 +29,5 @@ namespace DriveTogetherApp.Client.Services.FahrtService
             return await response.Content.ReadFromJsonAsync<ServiceResponse<Fahrt>>();
         }
     }
-    }
+    
 }

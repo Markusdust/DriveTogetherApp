@@ -89,11 +89,12 @@ namespace DriveTogetherApp.Server.Services.AutoService
                 await _context.SaveChangesAsync();
 
                 serviceResponse.Data = autoToUpdate;
+                serviceResponse.Message = "Auto erfolgreich aktualisiert.";
             }
             catch (Exception ex)
             {
                 serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
+                serviceResponse.Message = $"Ein Fehler ist aufgetreten: {ex.Message}";
             }
 
             return serviceResponse;
