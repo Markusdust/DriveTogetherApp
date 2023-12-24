@@ -1,0 +1,99 @@
+﻿@page "/alle-fahrten"
+@using System.Security.Claims
+@inject IFahrtService FahrtService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime;
+
+
+@if (fahrten == null)
+{
+    <p>Lädt...</p>
+}
+else
+{
+    <h4>Verfügbare Fahrten</h4>
+    @foreach (var fahrt in fahrten)
+    {
+        <div class="fahrt-eintrag">
+            <div class="fahrt-datum">Datum: @fahrt.Startdatum.ToString("dd.MM.yyyy HH:mm")</div>
+            <div class="fahrt-freiplaetze">Freie Plätze: @fahrt.AnzahlSitzplaetze</div>
+            <div class="fahrt-adresse">
+                <div class="fahrt-start">
+                    <h5>Startadresse</h5>
+                    <p>@fahrt.AbfahrtAdresse.Strasse, @fahrt.AbfahrtAdresse.Hausnummer</p>
+                    <p>@fahrt.AbfahrtAdresse.PLZ, @fahrt.AbfahrtAdresse.Stadt</p>
+                    <p>@fahrt.AbfahrtAdresse.Land</p>
+                </div>
+                <div class="fahrt-ziel">
+                    <h5>Zieladresse</h5>
+                    <p>@fahrt.AnkunftAdresse.Strasse, @fahrt.AnkunftAdresse.Hausnummer</p>
+                    <p>@fahrt.AnkunftAdresse.PLZ, @fahrt.AnkunftAdresse.Stadt</p>
+                    <p>@fahrt.AnkunftAdresse.Land</p>
+                </div>
+                <div>
+                    <button class="btn-fahrt">Fahren</button>
+                </div>
+            </div>
+           
+            
+        </div>
+    }
+}
+
+@code {
+    private List<Fahrt> fahrten;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var response = await FahrtService.GetFahrtenByUserId(userId);
+            if (response != null && response.Data != null)
+            {
+                fahrten = response.Data.OrderByDescending(f => f.Startdatum).ToList();
+            }
+        }
+
+
+    }
+}
+
+
+<style>
+    .fahrt-eintrag {
+        border: solid 1px #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        max-width: 1000px;
+        border-radius: 4px;
+    }
+    .fahrt-datum, .fahrt-freiplaetze {
+        font-weight: bold;
+    }
+    .fahrt-adresse {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    .fahrt-start, .fahrt-ziel {
+        margin: 5px;
+    }
+
+        .fahrt-start p , .fahrt-ziel p {
+        margin: 5px;
+        }
+    .btn-fahrt {
+        background-color: #7b1fa2;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        float: right;
+        border-radius: 4px;
+    }
+</style>
