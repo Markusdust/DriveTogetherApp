@@ -7,6 +7,7 @@ global using DriveTogetherApp.Server.Services.AuthService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Blazored.LocalStorage;
 
 
 
@@ -25,6 +26,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IAutoService, AutoService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFahrtService, FahrtService>();

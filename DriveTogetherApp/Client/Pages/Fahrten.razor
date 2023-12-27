@@ -31,7 +31,7 @@ else
                     <p>@fahrt.AnkunftAdresse.Land</p>
                 </div>
                 <div>
-                    <button class="btn-fahrt">Fahren</button>
+                    <button class="btn-fahrt"  @onclick="AddToCart">Fahren</button>
                 </div>
             </div>
            
@@ -60,6 +60,13 @@ else
 
 
     }
+
+    private async Task AddToCart()
+    {
+        
+    }
+
+
 }
 
 
