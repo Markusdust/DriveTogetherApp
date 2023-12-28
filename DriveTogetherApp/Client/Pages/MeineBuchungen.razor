@@ -6,8 +6,6 @@
 @inject IJSRuntime JSRuntime;
 
 
-<NavLink class="btn btn-primary" href="/erstellen-buchung">Neue Buchung erstellen</NavLink>
-
 @if (buchungen == null)
 {
     <p>Loading...</p>
@@ -29,16 +27,14 @@ else
         <tbody>
             @foreach (var buchung in buchungen)
             {
-                <tr>
+                <tr class="@(buchung.Storniert ? "storniert" : "")">
                     <td>@buchung.BuchungId</td>
-                    <td><a href="/fahrt/@buchung.FahrtId">@buchung.FahrtId</a></td>
+                    <td>@buchung.FahrtId</td>
                     <td>@buchung.Buchungsdatum.ToString("dd.MM.yyyy HH:mm")</td>
                     <td>@(buchung.Storniert ? "Ja" : "Nein")</td>
                     <td>
-                        <button type="button" class="btn btn-warning" @onclick="() => ConfirmStornierungBuchung(buchung)">Stornieren</button>
-
+                        <button type="button" class="btn btn-warning" @onclick="() => ConfirmStornierungBuchung(buchung)" disabled="@buchung.Storniert">Stornieren</button>
                     </td>
-                    <!-- Weitere Zellen nach Bedarf -->
                 </tr>
             }
         </tbody>
@@ -128,4 +124,10 @@ else
         }
    
     }
+
+<style>
+    .storniert {
+        background-color: #f8f9fa; /* Leichtes Grau */
+    }
+</style>
 
