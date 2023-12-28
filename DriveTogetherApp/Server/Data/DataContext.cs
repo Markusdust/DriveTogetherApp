@@ -1,4 +1,5 @@
 ﻿using DriveTogetherApp.Shared.Model;
+using System.Text;
 
 namespace DriveTogetherApp.Server.Data
 {
@@ -11,6 +12,7 @@ namespace DriveTogetherApp.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             // Definieren der Beziehung
             modelBuilder.Entity<Benutzer>()
                 .HasMany(b => b.Autos)
@@ -39,7 +41,18 @@ namespace DriveTogetherApp.Server.Data
                 .HasOne(f => f.AnkunftAdresse)
                 .WithMany()
                 .HasForeignKey(f => f.AnkunftAdresseId)
-                .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;;
+                .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;
+
+            modelBuilder.Entity<Buchung>()
+            .HasOne<Fahrt>()
+            .WithMany()
+            .HasForeignKey(b => b.FahrtId)
+            .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;
+
+            modelBuilder.Entity<Buchung>()
+            .HasOne<Benutzer>() // oder .HasOne(b => b.Kunde) wenn Navigationseigenschaft vorhanden
+            .WithMany()
+            .HasForeignKey(b => b.BenutzerId);
 
             modelBuilder.Entity<Benutzer>().HasData(
                new Benutzer
@@ -88,5 +101,7 @@ namespace DriveTogetherApp.Server.Data
         public DbSet<Benutzer> Benutzers { get; set; }
         public DbSet<Fahrt> Fahrten { get; set; }
         public DbSet<Adresse> Adressen { get; set; }
+        public DbSet<Buchung> Buchungen { get; set;}
+
     }
 }

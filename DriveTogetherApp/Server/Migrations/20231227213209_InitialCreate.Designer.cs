@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231222135124_InitialCreate")]
+    [Migration("20231227213209_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -174,10 +174,39 @@ namespace DriveTogetherApp.Server.Migrations
                             Nachname = "Mustermann",
                             PasswortHash = new byte[0],
                             PasswortSalt = new byte[0],
-                            Registrierungsdatum = new DateTime(2023, 12, 22, 14, 51, 24, 674, DateTimeKind.Local).AddTicks(3729),
+                            Registrierungsdatum = new DateTime(2023, 12, 27, 22, 32, 9, 240, DateTimeKind.Local).AddTicks(384),
                             Telefonnummer = "0123456789",
                             Vorname = "Max"
                         });
+                });
+
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Buchung", b =>
+                {
+                    b.Property<int>("BuchungId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BuchungId"));
+
+                    b.Property<int>("BenutzerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Buchungsdatum")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FahrtId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Storniert")
+                        .HasColumnType("bit");
+
+                    b.HasKey("BuchungId");
+
+                    b.HasIndex("BenutzerId");
+
+                    b.HasIndex("FahrtId");
+
+                    b.ToTable("Buchungen");
                 });
 
             modelBuilder.Entity("DriveTogetherApp.Shared.Model.Fahrt", b =>
@@ -231,6 +260,21 @@ namespace DriveTogetherApp.Server.Migrations
                         .WithMany("Autos")
                         .HasForeignKey("BenutzerId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DriveTogetherApp.Shared.Model.Buchung", b =>
+                {
+                    b.HasOne("DriveTogetherApp.Shared.Model.Benutzer", null)
+                        .WithMany()
+                        .HasForeignKey("BenutzerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DriveTogetherApp.Shared.Model.Fahrt", null)
+                        .WithMany()
+                        .HasForeignKey("FahrtId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

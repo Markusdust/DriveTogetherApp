@@ -1,20 +1,20 @@
-﻿@page "/alle-fahrten"
+﻿@page "/erstellen-buchung/{FahrtId:int}"
+
 @using System.Security.Claims
 @inject IFahrtService FahrtService
+@inject IBuchungService BuchungService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime;
-@inject NavigationManager NavigationManager
 
 
-@if (fahrten == null)
+@if (fahrt == null)
 {
     <p>Lädt...</p>
 }
 else
 {
-    <h4>Verfügbare Fahrten</h4>
-    @foreach (var fahrt in fahrten)
-    {
+    <h4>Fahrt Buchen</h4>
+
         <div class="fahrt-eintrag">
             <div class="fahrt-datum">Datum: @fahrt.Startdatum.ToString("dd.MM.yyyy HH:mm")</div>
             <div class="fahrt-freiplaetze">Freie Plätze: @fahrt.AnzahlSitzplaetze</div>
@@ -31,47 +31,84 @@ else
                     <p>@fahrt.AnkunftAdresse.PLZ, @fahrt.AnkunftAdresse.Stadt</p>
                     <p>@fahrt.AnkunftAdresse.Land</p>
                 </div>
+            <div class="fahrt-freiplaetze">Preis: @fahrt.Preis</div>
                 <div>
-                    <button class="btn-fahrt" @onclick="() => NavigateToBuchung(fahrt)" >Fahren</button>
-
+                <button class="btn-fahrt" @onclick="CreateBuch">Jetzt Buchen</button>
                 </div>
             </div>
-           
-            
         </div>
-    }
 }
 
 @code {
-    private List<Fahrt> fahrten;
+    private Fahrt? fahrt = new Fahrt();
+    private string message = string.Empty;
+    private string userId;
+
+    [Parameter]
+    public int FahrtId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (!string.IsNullOrEmpty(userId))
         {
-            var response = await FahrtService.GetFahrtenByUserId(userId);
+            var response = await FahrtService.GetFahrt(FahrtId);
             if (response != null && response.Data != null)
             {
-                fahrten = response.Data.OrderByDescending(f => f.Startdatum).ToList();
+                fahrt = response.Data;
             }
         }
 
 
     }
 
-    private async Task NavigateToBuchung(Fahrt fahrt)
+    private async Task CreateBuch()
     {
-        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "selectedFahrtId", fahrt.FahrtId.ToString());
-        NavigationManager.NavigateTo($"/erstellen-buchung/{fahrt.FahrtId}");
+        UpdateSitzplatzAnzahl(fahrt);
+
+        Buchung newBuchung = new Buchung
+            {
+                Buchungsdatum = DateTime.Now,
+                FahrtId = FahrtId,
+                BenutzerId = int.Parse(userId),
+                Storniert = false
+            };
+
+         var result = await BuchungService.CreateBuchung(newBuchung);
+
+        // if (result != null && result.Success)
+        // {
+        //     message = "Buchung erfolgreich erstellt";
+        // }
+        // else
+        // {
+        //     message = "Fehler: " + result.Message;
+        // }
     }
 
-
+    private async Task UpdateSitzplatzAnzahl(Fahrt fahrt)
+    {
+        if (fahrt.AnzahlSitzplaetze>0)
+        {
+            fahrt.AnzahlSitzplaetze = fahrt.AnzahlSitzplaetze - 1;
+            var result = await FahrtService.UpdateFahrt(fahrt);
+            if (result.Success)
+            {
+                message = "Sitzplatz der Fahrt erfolgreich aktualisiert.";
+            }
+            else
+            {
+                message = "Fehler beim Aktualisieren der Fahrt: " + result.Message;
+            }
+        }else
+        {
+            message = "Alle Sitzplätze sind bereits ausgebucht";
+        }
+    }
 }
-
 
 <style>
     .fahrt-eintrag {
@@ -82,24 +119,28 @@ else
         max-width: 1000px;
         border-radius: 4px;
     }
+
     .fahrt-datum, .fahrt-freiplaetze {
         font-weight: bold;
     }
+
     .fahrt-adresse {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
     }
+
     .fahrt-start, .fahrt-ziel {
         margin: 5px;
     }
 
-        .fahrt-start p , .fahrt-ziel p {
-        margin: 5px;
+        .fahrt-start p, .fahrt-ziel p {
+            margin: 5px;
         }
+
     .btn-fahrt {
-        background-color: #7b1fa2;
-        color: white;
+        background-color: #33b054;
+        color: black;
         padding: 10px 20px;
         border: none;
         cursor: pointer;

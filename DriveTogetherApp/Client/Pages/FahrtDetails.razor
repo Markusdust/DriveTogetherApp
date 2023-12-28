@@ -91,7 +91,7 @@
 
         if (user.Identity.IsAuthenticated)
         {
-            var result = await FahrtService.GetFahrt(1);
+            var result = await FahrtService.GetFahrt(Id);
             if (!result.Success)
             {
                 message = result.Message;

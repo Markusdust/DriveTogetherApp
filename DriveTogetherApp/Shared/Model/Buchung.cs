@@ -10,13 +10,18 @@ namespace DriveTogetherApp.Shared.Model
     {
         public int BuchungId { get; set; } //PK
         public DateTime Buchungsdatum { get; set; }
-        public string Zahlungsstatus { get; set; }
-        public string Zahlungsmethode { get; set; }
+
+        public int FahrtId { get; set; } //FK
+        public int BenutzerId { get; set; } //FK
+
+        public bool Storniert {  get; set; }
+
+        //public string Zahlungsstatus { get; set; }
+        //public string Zahlungsmethode { get; set; }
 
         /*
         // Foreign Keys
-        public int FahrtId { get; set; }
-        public int BenutzerId { get; set; }
+        
 
         // Navigationseigenschaften
         public virtual Fahrt Fahrt { get; set; }
