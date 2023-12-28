@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveTogetherApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231227213209_InitialCreate")]
+    [Migration("20231228143854_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -174,7 +174,7 @@ namespace DriveTogetherApp.Server.Migrations
                             Nachname = "Mustermann",
                             PasswortHash = new byte[0],
                             PasswortSalt = new byte[0],
-                            Registrierungsdatum = new DateTime(2023, 12, 27, 22, 32, 9, 240, DateTimeKind.Local).AddTicks(384),
+                            Registrierungsdatum = new DateTime(2023, 12, 28, 15, 38, 54, 246, DateTimeKind.Local).AddTicks(4741),
                             Telefonnummer = "0123456789",
                             Vorname = "Max"
                         });
@@ -268,7 +268,7 @@ namespace DriveTogetherApp.Server.Migrations
                     b.HasOne("DriveTogetherApp.Shared.Model.Benutzer", null)
                         .WithMany()
                         .HasForeignKey("BenutzerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DriveTogetherApp.Shared.Model.Fahrt", null)

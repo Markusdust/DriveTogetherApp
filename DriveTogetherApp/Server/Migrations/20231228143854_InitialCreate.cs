@@ -133,8 +133,7 @@ namespace DriveTogetherApp.Server.Migrations
                         name: "FK_Buchungen_Benutzers_BenutzerId",
                         column: x => x.BenutzerId,
                         principalTable: "Benutzers",
-                        principalColumn: "BenutzerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "BenutzerId");
                     table.ForeignKey(
                         name: "FK_Buchungen_Fahrten_FahrtId",
                         column: x => x.FahrtId,
@@ -145,7 +144,7 @@ namespace DriveTogetherApp.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Benutzers",
                 columns: new[] { "BenutzerId", "Email", "Geburtsdatum", "Nachname", "PasswortHash", "PasswortSalt", "Registrierungsdatum", "Telefonnummer", "Vorname" },
-                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 27, 22, 32, 9, 240, DateTimeKind.Local).AddTicks(384), "0123456789", "Max" });
+                values: new object[] { 1, "max.mustermann@example.com", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mustermann", new byte[0], new byte[0], new DateTime(2023, 12, 28, 15, 38, 54, 246, DateTimeKind.Local).AddTicks(4741), "0123456789", "Max" });
 
             migrationBuilder.InsertData(
                 table: "Autos",

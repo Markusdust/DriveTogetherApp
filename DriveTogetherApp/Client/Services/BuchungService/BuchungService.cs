@@ -17,5 +17,17 @@ namespace DriveTogetherApp.Client.Services.BuchungService
             var response = await _http.PostAsJsonAsync("api/buchung", buchung);
             return await response.Content.ReadFromJsonAsync<ServiceResponse<Buchung>>();
         }
+
+        public async Task<ServiceResponse<List<Buchung>>> GetBuchungenByUserId(string userId)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<Buchung>>>($"api/buchung/user/{userId}");
+            return result;
+        }
+
+        public async Task<ServiceResponse<Buchung>> UpdateBuchung(Buchung buchung)
+        {
+            var response = await _http.PutAsJsonAsync($"api/buchung/{buchung.BuchungId}", buchung);
+            return await response.Content.ReadFromJsonAsync<ServiceResponse<Buchung>>();
+        }
     }
 }

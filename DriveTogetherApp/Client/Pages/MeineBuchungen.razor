@@ -1,0 +1,131 @@
+﻿@page "/meine-buchungen"
+@using System.Security.Claims
+@inject IBuchungService BuchungService
+@inject IFahrtService FahrtService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime;
+
+
+<NavLink class="btn btn-primary" href="/erstellen-buchung">Neue Buchung erstellen</NavLink>
+
+@if (buchungen == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h4>Meine Buchungen</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Buchung ID</th>
+                <th>Fahrt ID</th>
+                <th>Buchungsdatum</th>
+                <th>Storniert?</th>
+                <th>Button</th>
+                <!-- Weitere Spalten nach Bedarf -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var buchung in buchungen)
+            {
+                <tr>
+                    <td>@buchung.BuchungId</td>
+                    <td><a href="/fahrt/@buchung.FahrtId">@buchung.FahrtId</a></td>
+                    <td>@buchung.Buchungsdatum.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@(buchung.Storniert ? "Ja" : "Nein")</td>
+                    <td>
+                        <button type="button" class="btn btn-warning" @onclick="() => ConfirmStornierungBuchung(buchung)">Stornieren</button>
+
+                    </td>
+                    <!-- Weitere Zellen nach Bedarf -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Buchung> buchungen;
+    private string message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var response = await BuchungService.GetBuchungenByUserId(userId);
+            if (response != null && response.Data != null)
+            {
+                buchungen = response.Data.ToList();
+            }
+        }
+    }
+    private async Task HandleUpdateBuchung(Buchung buchung)
+    {
+        Console.WriteLine("updatesubmit");
+
+        UpdateSitzplatzAnzahl(buchung);
+
+
+        var result = await BuchungService.UpdateBuchung(buchung);
+        if (result.Success)
+        {
+            message = "Fahrt erfolgreich aktualisiert.";
+        }
+        else
+        {
+            message = "Fehler beim Aktualisieren der Fahrt: " + result.Message;
+        }
+    }
+
+    private async Task CancelBuchung(Buchung buchung)
+    {
+        Console.WriteLine("Storniervorgang");
+        buchung.Storniert = true;
+
+        HandleUpdateBuchung(buchung);
+    }
+
+    private async Task ConfirmStornierungBuchung(Buchung buchung)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Möchten Sie die Buchung wirklich stornieren?");
+        if (confirmed)
+        {
+            CancelBuchung(buchung);
+        }
+    }
+
+    private async Task UpdateSitzplatzAnzahl(Buchung buchung)
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        Fahrt fahrt = new Fahrt();
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var response = await FahrtService.GetFahrt(buchung.FahrtId);
+            if (response != null && response.Data != null)
+            {
+                fahrt = response.Data;
+            }
+        }
+
+            fahrt.AnzahlSitzplaetze = fahrt.AnzahlSitzplaetze + 1;
+            var result = await FahrtService.UpdateFahrt(fahrt);
+            if (result.Success)
+            {
+                message = "Sitzplatz der Fahrt erfolgreich aktualisiert.";
+            }
+            else
+            {
+                message = "Fehler beim Aktualisieren der Sitzplätze der Fahrt: " + result.Message;
+            }
+        }
+   
+    }
+

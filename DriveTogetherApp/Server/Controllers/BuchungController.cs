@@ -25,5 +25,25 @@ namespace DriveTogetherApp.Server.Controllers
             }
             return Ok(serviceResponse);
         }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<ServiceResponse<List<Buchung>>>> GetBuchungenByUserId(string userId)
+        {
+            var result = await _buchungService.GetBuchungenByUserIdAsync(userId);
+            return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBuchung([FromBody] Buchung buchung)
+        {
+            var serviceResponse = await _buchungService.UpdateBuchung(buchung);
+
+            if (!serviceResponse.Success)
+            {
+                return BadRequest(serviceResponse.Message);
+            }
+
+            return Ok(serviceResponse);
+        }
     }
 }

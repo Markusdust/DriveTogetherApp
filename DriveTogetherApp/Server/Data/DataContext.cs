@@ -52,7 +52,8 @@ namespace DriveTogetherApp.Server.Data
             modelBuilder.Entity<Buchung>()
             .HasOne<Benutzer>() // oder .HasOne(b => b.Kunde) wenn Navigationseigenschaft vorhanden
             .WithMany()
-            .HasForeignKey(b => b.BenutzerId);
+            .HasForeignKey(b => b.BenutzerId)
+            .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;;
 
             modelBuilder.Entity<Benutzer>().HasData(
                new Benutzer
