@@ -41,6 +41,7 @@ else
 
 @code {
     private Fahrt? fahrt = new Fahrt();
+
     private string message = string.Empty;
     private string userId;
 
@@ -49,6 +50,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        fahrt.AbfahrtAdresse = new Adresse(); // Initialisierung der AbfahrtAdresse
+        fahrt.AnkunftAdresse = new Adresse(); // Initialisierung der AnkunftAdresse
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -79,14 +83,14 @@ else
 
          var result = await BuchungService.CreateBuchung(newBuchung);
 
-        // if (result != null && result.Success)
-        // {
-        //     message = "Buchung erfolgreich erstellt";
-        // }
-        // else
-        // {
-        //     message = "Fehler: " + result.Message;
-        // }
+        if (result != null && result.Success)
+        {
+            message = "Buchung erfolgreich erstellt";
+        }
+        else
+        {
+            message = "Fehler: " + result.Message;
+        }
     }
 
     private async Task UpdateSitzplatzAnzahl(Fahrt fahrt)
