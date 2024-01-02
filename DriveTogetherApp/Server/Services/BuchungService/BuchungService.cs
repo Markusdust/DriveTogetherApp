@@ -19,6 +19,16 @@ namespace DriveTogetherApp.Server.Services.BuchungService
             _context.Buchungen.Add(buchung);
             await _context.SaveChangesAsync();
 
+            var userEmail = await _authService.GetUserEmailById(buchung.BenutzerId);
+
+            var email = new Email
+            {
+                To = userEmail.Data,
+                Subject = "Bestätigung Buchung",
+                Body = "Lieber Nutzer Deine Buchung mit der FahrtId:" + buchung.FahrtId + "wurde erfolgreich getätigt."
+            };
+            await _emailService.SendEmailAsync(email);
+
 
             return new ServiceResponse<Buchung> { Data = buchung };
         }
