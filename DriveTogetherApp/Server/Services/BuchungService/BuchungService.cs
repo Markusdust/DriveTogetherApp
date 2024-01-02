@@ -6,9 +6,13 @@ namespace DriveTogetherApp.Server.Services.BuchungService
     public class BuchungService : IBuchungService
     {
         private readonly DataContext _context;
-        public BuchungService(DataContext context)
+        private readonly IEmailService _emailService;
+        private readonly IAuthService _authService;
+        public BuchungService(DataContext context, IEmailService emailService, IAuthService authService)
         {
             _context = context;
+            _emailService = emailService;
+            _authService = authService;
         }
         public async Task<ServiceResponse<Buchung>> AddBuchung(Buchung buchung)
         {
@@ -48,6 +52,20 @@ namespace DriveTogetherApp.Server.Services.BuchungService
                     serviceResponse.Success = false;
                     serviceResponse.Message = "Buchung existiert nicht.";
                     return serviceResponse;
+                }
+
+
+                if (buchung.Storniert)
+                {
+                    var userEmail = await _authService.GetUserEmailById(buchung.BenutzerId);
+
+                    var email = new Email
+                    {
+                        To = userEmail.Data,
+                        Subject = "Bestätigung Stornierung",
+                        Body = "Lieber Nutzer Deine Fahrt mit der FahrtId:" + buchung.FahrtId + "wurde erfolgreich Storniert."
+                    };
+                    await _emailService.SendEmailAsync(email);
                 }
                 buchungToUpdate.Buchungsdatum = buchung.Buchungsdatum;
                 buchungToUpdate.FahrtId = buchung.FahrtId;

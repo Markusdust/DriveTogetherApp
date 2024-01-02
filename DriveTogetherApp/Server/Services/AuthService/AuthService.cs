@@ -139,5 +139,20 @@ namespace DriveTogetherApp.Server.Services.AuthService
 
             return new ServiceResponse<bool> { Data = true, Message = "Password wurde geändert" };
         }
+
+        public async Task<ServiceResponse<string>> GetUserEmailById(int userId)
+        {
+            var response = new ServiceResponse<string>();
+            var user = await _context.Benutzers.Where(u => u.BenutzerId == userId).FirstOrDefaultAsync();
+            
+            if(user != null)
+            {
+                response.Data = user.Email;
+            }
+
+            return response;
+        }
+
     }
+
 }
