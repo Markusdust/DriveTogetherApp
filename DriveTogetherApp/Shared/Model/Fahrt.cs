@@ -22,12 +22,5 @@ namespace DriveTogetherApp.Shared.Model
 
         public int AnkunftAdresseId { get; set; }
         public Adresse AnkunftAdresse { get; set; }
-
-
-        /*
-        // Navigationseigenschaften
-        public virtual Auto Auto { get; set; }
-        public virtual ICollection<Buchung> Buchungen { get; set; }
-        */
     }
 }

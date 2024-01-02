@@ -15,17 +15,5 @@ namespace DriveTogetherApp.Shared.Model
         public int BenutzerId { get; set; } //FK
 
         public bool Storniert {  get; set; }
-
-        //public string Zahlungsstatus { get; set; }
-        //public string Zahlungsmethode { get; set; }
-
-        /*
-        // Foreign Keys
-        
-
-        // Navigationseigenschaften
-        public virtual Fahrt Fahrt { get; set; }
-        public virtual Benutzer Benutzer { get; set; }
-        */
     }
 }

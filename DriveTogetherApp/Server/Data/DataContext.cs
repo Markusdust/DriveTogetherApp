@@ -50,7 +50,7 @@ namespace DriveTogetherApp.Server.Data
             .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;
 
             modelBuilder.Entity<Buchung>()
-            .HasOne<Benutzer>() // oder .HasOne(b => b.Kunde) wenn Navigationseigenschaft vorhanden
+            .HasOne<Benutzer>() 
             .WithMany()
             .HasForeignKey(b => b.BenutzerId)
             .OnDelete(DeleteBehavior.NoAction); // Keine Kaskadenlöschung;;
