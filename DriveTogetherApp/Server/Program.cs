@@ -5,11 +5,11 @@ global using DriveTogetherApp.Server.Services.AutoService;
 global using DriveTogetherApp.Server.Services.FahrtService;
 global using DriveTogetherApp.Server.Services.AuthService;
 global using DriveTogetherApp.Server.Services.BuchungService;
+global using DriveTogetherApp.Server.Services.EmailService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Blazored.LocalStorage;
-
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +32,8 @@ builder.Services.AddScoped<IAutoService, AutoService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFahrtService, FahrtService>();
 builder.Services.AddScoped<IBuchungService, BuchungService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

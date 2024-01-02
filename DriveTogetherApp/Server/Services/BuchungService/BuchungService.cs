@@ -57,6 +57,8 @@ namespace DriveTogetherApp.Server.Services.BuchungService
                 _context.Buchungen.Update(buchungToUpdate);
                 await _context.SaveChangesAsync();
 
+
+
             }
             catch (Exception ex)
             {
