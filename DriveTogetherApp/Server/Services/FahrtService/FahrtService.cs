@@ -1,4 +1,5 @@
-﻿using DriveTogetherApp.Shared.Model;
+﻿using DriveTogetherApp.Client.Pages;
+using DriveTogetherApp.Shared.Model;
 
 namespace DriveTogetherApp.Server.Services.FahrtService
 {
@@ -7,12 +8,14 @@ namespace DriveTogetherApp.Server.Services.FahrtService
         private readonly DataContext _context;
         private readonly IEmailService _emailService;
         private readonly IAuthService _authService;
+        private readonly IBuchungService _buchungService;
 
-        public FahrtService(DataContext context, IEmailService emailService, IAuthService authService)
+        public FahrtService(DataContext context, IEmailService emailService, IAuthService authService, IBuchungService buchungService)
         {
             _context = context;
             _emailService = emailService;
             _authService = authService;
+            _buchungService = buchungService;
         }
 
         public async Task<ServiceResponse<Fahrt>> CreateFahrtAsync(Fahrt fahrt)
@@ -108,6 +111,17 @@ namespace DriveTogetherApp.Server.Services.FahrtService
                         Body = "Lieber Nutzer Deine Fahrt mit der FahrtId:" + fahrt.FahrtId + "wurde erfolgreich Storniert."
                     };
                     await _emailService.SendEmailAsync(email);
+
+                    //Buchungen Stornieren falls jemand bereits angemeldet ist
+                    var buchugen = await _buchungService.GetBuchungByFahrtIdAsync(fahrt.FahrtId);
+                    if (buchugen.Data.Count >0)
+                    {
+                        foreach (var buchung in buchugen.Data)
+                        {
+                            buchung.Storniert = true;
+                            await _buchungService.UpdateBuchungByFahrt(buchung);
+                        }
+                    }
                 }
 
                 _context.Fahrten.Update(fahrtToUpdate);

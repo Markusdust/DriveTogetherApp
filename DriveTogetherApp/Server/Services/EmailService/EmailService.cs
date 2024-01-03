@@ -13,7 +13,6 @@ namespace DriveTogetherApp.Server.Services.EmailService
             email.To.Add(MailboxAddress.Parse(request.To));
             email.Subject = request.Subject;
             email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = request.Body };
-
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
             smtp.Authenticate("noreply.drivetogether@gmail.com", "cuni vtqq kvpa hhab");

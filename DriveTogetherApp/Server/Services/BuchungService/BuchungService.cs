@@ -96,5 +96,59 @@ namespace DriveTogetherApp.Server.Services.BuchungService
 
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<List<Buchung>>> GetBuchungByFahrtIdAsync(int FahrtId)
+        {
+            var serviceResponse = new ServiceResponse<List<Buchung>>();
+            serviceResponse.Data = await _context.Buchungen.Where(b=>b.FahrtId == FahrtId).ToListAsync();
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<Buchung>> UpdateBuchungByFahrt(Buchung buchung)
+        {
+            var serviceResponse = new ServiceResponse<Buchung>();
+            try
+            {
+                var buchungToUpdate = await _context.Buchungen.FindAsync(buchung.BuchungId);
+                if (buchungToUpdate == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Buchung existiert nicht.";
+                    return serviceResponse;
+                }
+
+
+                if (buchung.Storniert)
+                {
+                    var userEmail = await _authService.GetUserEmailById(buchung.BenutzerId);
+
+                    var email = new Email
+                    {
+                        To = userEmail.Data,
+                        Subject = "Bestätigung Stornierung",
+                        Body = "Lieber Nutzer, leider wurde die Fahrt vom Fahrer/in storniert FahrtId:" + buchung.FahrtId + "Tut uns leid, wir hoffen es entstehen nicht zu grosse Umstände für dich"
+                    };
+                    await _emailService.SendEmailAsync(email);
+                }
+                buchungToUpdate.Buchungsdatum = buchung.Buchungsdatum;
+                buchungToUpdate.FahrtId = buchung.FahrtId;
+                buchungToUpdate.BenutzerId = buchung.BenutzerId;
+                buchungToUpdate.Storniert = buchung.Storniert;
+
+                _context.Buchungen.Update(buchungToUpdate);
+                await _context.SaveChangesAsync();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = $"Ein Fehler ist aufgetreten: {ex.Message}";
+            }
+
+            return serviceResponse;
+        }
     }
 }
