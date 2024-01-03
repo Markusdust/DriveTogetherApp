@@ -5,14 +5,29 @@ namespace DriveTogetherApp.Server.Services.FahrtService
     public class FahrtService : IFahrtService
     {
         private readonly DataContext _context;
+        private readonly IEmailService _emailService;
+        private readonly IAuthService _authService;
 
-        public FahrtService(DataContext context)
+        public FahrtService(DataContext context, IEmailService emailService, IAuthService authService)
         {
             _context = context;
+            _emailService = emailService;
+            _authService = authService;
         }
 
         public async Task<ServiceResponse<Fahrt>> CreateFahrtAsync(Fahrt fahrt)
         {
+            
+            var userEmail = await _authService.GetUserEmailById(fahrt.BenutzerId);
+
+            var email = new Email
+            {
+                To = userEmail.Data,
+                Subject = "Bestätigung Buchung",
+                Body = "Lieber Nutzer Deine Fahrt mit der FahrtId:" + fahrt.FahrtId + "wurde erfolgreich erstelllt."
+            };
+            await _emailService.SendEmailAsync(email);
+
             _context.Fahrten.Add(fahrt);
             await _context.SaveChangesAsync();
 
@@ -81,6 +96,19 @@ namespace DriveTogetherApp.Server.Services.FahrtService
                 fahrtToUpdate.Storniert = fahrt.Storniert;
                 fahrtToUpdate.AbfahrtAdresse = fahrt.AbfahrtAdresse;
                 fahrtToUpdate.AnkunftAdresse = fahrt.AnkunftAdresse;
+
+                if (fahrt.Storniert)
+                {
+                    var userEmail = await _authService.GetUserEmailById(fahrt.BenutzerId);
+
+                    var email = new Email
+                    {
+                        To = userEmail.Data,
+                        Subject = "Bestätigung Stornierung",
+                        Body = "Lieber Nutzer Deine Fahrt mit der FahrtId:" + fahrt.FahrtId + "wurde erfolgreich Storniert."
+                    };
+                    await _emailService.SendEmailAsync(email);
+                }
 
                 _context.Fahrten.Update(fahrtToUpdate);
                 await _context.SaveChangesAsync();
