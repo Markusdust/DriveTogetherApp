@@ -1,4 +1,5 @@
-﻿using DriveTogetherApp.Shared.Model;
+﻿using DriveTogetherApp.Client.Pages;
+using DriveTogetherApp.Shared.Model;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,11 +12,13 @@ namespace DriveTogetherApp.Server.Services.AuthService
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthService(DataContext context, IConfiguration configuration)
+        public AuthService(DataContext context, IConfiguration configuration, IEmailService emailService)
         {
             _context = context;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         public async Task<ServiceResponse<string>> Login(string email, string password)
@@ -59,6 +62,16 @@ namespace DriveTogetherApp.Server.Services.AuthService
 
             user.PasswortHash = passswordHash;
             user.PasswortSalt = passwortSalt;
+
+            //sende Email an neuen Benutzer
+            var email = new Email
+            {
+                To = user.Email,
+                Subject = "Willkommen bei DriveTogether!",
+                Body = EmailText.registerMail
+            };
+            await _emailService.SendEmailAsync(email);
+
 
             _context.Benutzers.Add(user);
             await _context.SaveChangesAsync();
