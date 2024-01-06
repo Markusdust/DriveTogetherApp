@@ -26,8 +26,8 @@ namespace DriveTogetherApp.Server.Services.FahrtService
             var email = new Email
             {
                 To = userEmail.Data,
-                Subject = "Bestätigung Buchung",
-                Body = "Lieber Nutzer Deine Fahrt mit der FahrtId:" + fahrt.FahrtId + "wurde erfolgreich erstelllt."
+                Subject = "Bestätigung Fahrt erstellt",
+                Body = "Lieber Nutzer Deine Fahrt mit der FahrtId: " + fahrt.FahrtId + " wurde erfolgreich erstelllt."
             };
             await _emailService.SendEmailAsync(email);
 

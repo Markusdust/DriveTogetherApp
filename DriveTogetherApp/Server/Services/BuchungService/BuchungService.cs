@@ -73,7 +73,7 @@ namespace DriveTogetherApp.Server.Services.BuchungService
                     {
                         To = userEmail.Data,
                         Subject = "Bestätigung Stornierung",
-                        Body = "Lieber Nutzer Deine Fahrt mit der FahrtId:" + buchung.FahrtId + "wurde erfolgreich Storniert."
+                        Body = "Lieber Nutzer Deine Buchung mit der FahrtId: " + buchung.FahrtId + " wurde erfolgreich Storniert."
                     };
                     await _emailService.SendEmailAsync(email);
                 }
