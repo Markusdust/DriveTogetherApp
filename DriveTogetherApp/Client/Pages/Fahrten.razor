@@ -5,15 +5,16 @@
 @inject IJSRuntime JSRuntime;
 @inject NavigationManager NavigationManager
 
+<input type="text" @bind="searchText" @oninput="FilterFahrten" placeholder="Suche..." />
 
-@if (fahrten == null)
+@if (gefilterteFahrten == null)
 {
     <p>Lädt...</p>
 }
 else
 {
     <h4>Verfügbare Fahrten</h4>
-    @foreach (var fahrt in fahrten)
+    @foreach (var fahrt in gefilterteFahrten)
     {
         <div class="fahrt-eintrag">
             <div class="fahrt-datum">Datum: @fahrt.Startdatum.ToString("dd.MM.yyyy HH:mm")</div>
@@ -44,6 +45,8 @@ else
 
 @code {
     private List<Fahrt> fahrten;
+    private List<Fahrt> gefilterteFahrten;
+    private string searchText = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,6 +60,7 @@ else
             if (response != null && response.Data != null)
             {
                 fahrten = response.Data.OrderByDescending(f => f.Startdatum).ToList();
+                gefilterteFahrten = fahrten;
             }
         }
 
@@ -67,6 +71,25 @@ else
     {
         await JSRuntime.InvokeVoidAsync("localStorage.setItem", "selectedFahrtId", fahrt.FahrtId.ToString());
         NavigationManager.NavigateTo($"/erstellen-buchung/{fahrt.FahrtId}");
+    }
+
+    private void FilterFahrten()
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            gefilterteFahrten = fahrten;
+            StateHasChanged();
+        }
+        else
+        {
+            gefilterteFahrten = fahrten.Where(f => f.Startdatum.ToString().Contains(searchText) ||
+                                                   (f.AbfahrtAdresse != null && (f.AbfahrtAdresse.Strasse.Contains(searchText) ||
+                                                                                 f.AbfahrtAdresse.Stadt.Contains(searchText))) ||
+                                                   (f.AnkunftAdresse != null && (f.AnkunftAdresse.Strasse.Contains(searchText) ||
+                                                                                 f.AnkunftAdresse.Stadt.Contains(searchText)))
+                                              ).ToList();
+        }
+        StateHasChanged();
     }
 
 
