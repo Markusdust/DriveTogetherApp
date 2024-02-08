@@ -37,6 +37,10 @@ else
                 </div>
             </div>
         </div>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-success">@message</div>
+    }
 }
 
 @code {
