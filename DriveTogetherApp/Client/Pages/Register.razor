@@ -24,10 +24,15 @@
 </div>
 <button typeof="submit" class="btn btn-primary">Registrieren</button>
 <div class="@messageCssClass">
-        <span>@message</span>
+        <span> </span>
 </div>
 
 </EditForm>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-success">@message</div>
+}
+
 @code {
     BenutzerRegister benutzer = new BenutzerRegister();
 
@@ -35,17 +40,19 @@
     string messageCssClass = string.Empty;
 
 
-    async void HandleRegistration()
+    async Task HandleRegistration()
     {
         var result = await AuthService.Register(benutzer);
         message = result.Message;
         if (result.Success)
         {
             messageCssClass = "text-success";
+            message = "Benutzer erfolgreich erstellt";
         }
         else
         {
             messageCssClass = "text-danger";
+            message = "Sorry etwas ging schief beim erstellen des Benutzers";
         }
     }
 }

@@ -56,10 +56,12 @@ else
 
         if (!string.IsNullOrEmpty(userId))
         {
-            var response = await FahrtService.GetFahrtenByUserId(userId);
+            var response = await FahrtService.GetFahrten(); //await FahrtService.GetFahrtenByUserId(userId);
             if (response != null && response.Data != null)
             {
-                fahrten = response.Data.OrderByDescending(f => f.Startdatum).ToList();
+                //fahrten = response.Data.OrderByDescending(f => f.Startdatum).ToList();
+                fahrten = response.Data.Where(f => !f.Storniert).OrderBy(f => f.Startdatum).ToList();
+
                 gefilterteFahrten = fahrten;
             }
         }
@@ -82,7 +84,8 @@ else
         }
         else
         {
-            gefilterteFahrten = fahrten.Where(f => f.Startdatum.ToString().Contains(searchText) ||
+            gefilterteFahrten = fahrten.Where(f => !f.Storniert &&
+                                                    f.Startdatum.ToString().Contains(searchText) ||
                                                    (f.AbfahrtAdresse != null && (f.AbfahrtAdresse.Strasse.Contains(searchText) ||
                                                                                  f.AbfahrtAdresse.Stadt.Contains(searchText))) ||
                                                    (f.AnkunftAdresse != null && (f.AnkunftAdresse.Strasse.Contains(searchText) ||

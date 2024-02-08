@@ -58,6 +58,26 @@ namespace DriveTogetherApp.Server.Services.FahrtService
             return response;
         }
 
+        public async Task<ServiceResponse<List<Fahrt>>> GetFahrtenAsync()
+        {
+            var response = new ServiceResponse<List<Fahrt>>();
+            var fahrt = await _context.Fahrten
+                                .Include(f => f.AbfahrtAdresse)
+                                .Include(f => f.AnkunftAdresse)
+                                .ToListAsync();
+            if (fahrt == null)
+            {
+                response.Success = false;
+                response.Message = "Keine Fahrten vorhanden";
+            }
+            else
+            {
+                response.Data = fahrt;
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<List<Fahrt>>> GetFahrtenByUserIdAsync(string userId)
         {
             var response = new ServiceResponse<List<Fahrt>>();
